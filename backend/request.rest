@@ -1,0 +1,25 @@
+GET http://localhost:2000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImVtYWlsNEBnbWFpbC5jb20iLCJpYXQiOjE2ODY4NDU4NjAsImV4cCI6MTY4Njg0NTg5MH0.6AQB8Ll9IMsfevPsXSD4fTfFYNLcw746erSYffjj_5E
+####
+POST http://localhost:2000/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "email4@gmail.com",
+    "password": "123456"    
+}
+###
+POST http://localhost:2000/login
+Content-Type: application/json
+
+{
+    "email":"email4@gmail.com",
+    "password":"123456"
+}
+
+###
+GET http://localhost:2000/token
+
+###
+DELETE http://localhost:2000/logout
