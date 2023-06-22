@@ -1,12 +1,14 @@
 GET http://localhost:2000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwLCJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImVtYWlsNEBnbWFpbC5jb20iLCJpYXQiOjE2ODY4NDU4NjAsImV4cCI6MTY4Njg0NTg5MH0.6AQB8Ll9IMsfevPsXSD4fTfFYNLcw746erSYffjj_5E
+Authorization: BearereyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiZW1haWw0MUBnbWFpbC5jb20iLCJpYXQiOjE2ODc0MDcwMDMsImV4cCI6MTY4NzQwNzAzM30.C6kMGw8D5VjQnTpDlo5UyLtZrXIAiyDI9o43YIR4gbc
+
+
 ####
 POST http://localhost:2000/users
 Content-Type: application/json
 
 {
     "name": "John Doe",
-    "email": "email4@gmail.com",
+    "email": "email1@gmail.com",
     "password": "123456"    
 }
 ###
@@ -14,7 +16,7 @@ POST http://localhost:2000/login
 Content-Type: application/json
 
 {
-    "email":"email4@gmail.com",
+    "email":"email41@gmail.com",
     "password":"123456"
 }
 

@@ -1,18 +1,15 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader?.split(" ")[1];
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
-  if (!token) {
+  if (token == null) {
     return res.status(401).json({ error: "You are not authenticated" });
   }
-
-  try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.user = decoded;
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ error: "Token is not valid" });
+    req.email = decoded.email;
     next();
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  });
 };

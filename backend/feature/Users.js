@@ -1,7 +1,6 @@
 import prisma from "../db/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 export const getUsers = async (req, res) => {
   const users = await prisma.user.findMany({
     select: {
