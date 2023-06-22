@@ -3,12 +3,13 @@ import Navigation from "../components/Molecules/Navigation";
 import Header from "../components/Molecules/Header";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { useRefreshTokenMutation } from "../features/users";
+// import { useRefreshTokenMutation } from "../features/users";
+import axios from "axios";
 
 const Dashboard = () => {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
-  const [expiresIn, setExpiresIn] = useState("");
+  const [expire, setExpire] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,31 +18,51 @@ const Dashboard = () => {
 
   const refreshToken = async () => {
     try {
-      const response = await fetch("http://localhost:2000/token", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await response.json();
-      setToken(data.accessToken);
-      const decoded = jwt_decode(data.accessToken);
+      const response = await axios.get("http://localhost:2000/token");
+      setToken(response.data.accessToken);
+      const decoded = jwt_decode(response.data.accessToken);
       setName(decoded.name);
-      setExpiresIn(decoded.exp);
-      console.log(decoded);
+      setExpire(decoded.exp);
     } catch (error) {
-      console.log(error);
-      navigate("/login");
+      if (error.response) {
+        navigate("/login");
+      }
     }
   };
 
+  const axiosInstance = axios.create();
+
+  axiosInstance.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        const response = await axios.get("http://localhost:2000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
   const getUsers = async () => {
-    const response = await fetch("http://localhost:2000/users", {
-      method: "GET",
-      credentials: "include",
+    const response = await axiosInstance.get("http://localhost:2000/users", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(response);
+    console.log(response.data);
+  };
+
+  const Logout = async () => {
+    const response = await axiosInstance.delete("http://localhost:2000/logout");
+    console.log(response.data);
+    navigate("/login");
   };
 
   const handleSearch = (e) => {
@@ -62,10 +83,13 @@ const Dashboard = () => {
         <div className="flex-1 bg-white p-8">
           <div className="container">
             <h2 className="text-2xl font-semibold mb-6">
-              Welcome to Dashboard! {name}
+              Welcome to Dashboard! {name} {expire}
             </h2>
             <button onClick={getUsers} className="btn">
               Get
+            </button>
+            <button onClick={Logout} className="btn">
+              Logout
             </button>
           </div>
         </div>
