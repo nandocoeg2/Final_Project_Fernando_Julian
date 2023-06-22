@@ -4,13 +4,14 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 export const userApi = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: baseURL }), // Adjust the baseUrl with your backend URL
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
         url: "/login",
         method: "POST",
         body: credentials,
+        credentials: "include",
       }),
     }),
     register: builder.mutation({
@@ -20,7 +21,18 @@ export const userApi = createApi({
         body: userData,
       }),
     }),
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: "/token",
+        method: "POST",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = userApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useRefreshTokenMutation, // Add this line
+} = userApi;

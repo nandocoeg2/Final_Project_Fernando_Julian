@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../features/users";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
   });
 
   const [login, { isLoading, error, data }] = useLoginMutation();
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -22,7 +22,6 @@ const LoginPage = () => {
       isLoading
         ? console.log("Logging in...")
         : setTimeout(() => navigate("/dashboard"), 1000);
-      localStorage.setItem("accessToken", result.data.accessToken);
     }
   };
 
