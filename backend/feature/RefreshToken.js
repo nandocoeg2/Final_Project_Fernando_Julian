@@ -7,13 +7,14 @@ export const refreshToken = async (req, res) => {
     if (!refreshToken) {
       return res.status(401).json({ error: "You are not authenticated" });
     }
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findMany({
       where: {
-        refreshToken,
+        refreshToken: refreshToken,
       },
     });
+    console.log(user);
     if (!user) {
-      return res.status(401).json({ error: "You are not authenticated" });
+      return res.status(403);
     }
     jwt.verify(
       refreshToken,
@@ -43,9 +44,14 @@ export const refreshToken = async (req, res) => {
           httpOnly: true,
           maxAge: 1000 * 60 * 60 * 24,
         });
+
         res.json({ accessToken });
       }
     );
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
   } catch (error) {
     console.log(error);
   }

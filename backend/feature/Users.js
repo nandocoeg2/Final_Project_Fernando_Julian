@@ -100,22 +100,24 @@ export const Logout = async (req, res) => {
   if (!refreshToken) {
     return res.status(401).json({ error: "You are not authenticated" });
   }
+
   const user = await prisma.user.findFirst({
     where: {
-      refreshToken,
+      refreshToken: refreshToken,
     },
   });
-  if (!user) {
-    return res.status(401).json({ error: "You are not authenticated" });
-  }
-  await prisma.user.update({
-    where: {
-      id: user.id,
-    },
-    data: {
-      refreshToken: null,
-    },
-  });
+
+  console.log(user);
+
+  // await prisma.user.update({
+  //   where: {
+  //     id: user.id,
+  //   },
+  //   data: {
+  //     refreshToken: null,
+  //   },
+  // });
+
   res.clearCookie("refreshToken");
-  res.json({ message: "Logout successful" });
+  res.json({ message: "Logged out" });
 };
