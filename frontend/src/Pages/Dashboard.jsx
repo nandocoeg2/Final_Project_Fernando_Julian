@@ -3,8 +3,9 @@ import Navigation from "../components/Molecules/Navigation";
 import Header from "../components/Molecules/Header";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-// import { useRefreshTokenMutation } from "../features/users";
+import { useRefreshTokenMutation } from "../features/users";
 import axios from "axios";
+import { axiosInstance } from "../app/axios";
 
 const Dashboard = () => {
   const [name, setName] = useState("");
@@ -13,24 +14,22 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    refreshToken();
+    responseToken();
   }, []);
 
-  const refreshToken = async () => {
+  const [refreshToken] = useRefreshTokenMutation();
+
+  const responseToken = async () => {
     try {
-      const response = await axios.get("http://localhost:2000/token");
+      const response = await refreshToken();
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setName(decoded.name);
       setExpire(decoded.exp);
     } catch (error) {
-      if (error.response) {
-        navigate("/login");
-      }
+      navigate("/login");
     }
   };
-
-  const axiosInstance = axios.create();
 
   axiosInstance.interceptors.request.use(
     async (config) => {

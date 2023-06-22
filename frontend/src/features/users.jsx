@@ -24,7 +24,7 @@ export const userApi = createApi({
     refreshToken: builder.mutation({
       query: () => ({
         url: "/token",
-        method: "POST",
+        method: "GET",
         credentials: "include",
       }),
     }),
