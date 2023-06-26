@@ -7,7 +7,7 @@ export const getUsers = async (req, res) => {
       id: true,
       name: true,
       email: true,
-      roles: {
+      role: {
         select: {
           name: true,
         },
@@ -42,9 +42,9 @@ export const Register = async (req, res) => {
         name,
         email,
         password: hashPassword,
-        roles: {
+        role: {
           connect: {
-            name: "user",
+            id: 1,
           },
         },
       },
@@ -63,7 +63,7 @@ export const Login = async (req, res) => {
         email: req.body.email,
       },
       include: {
-        roles: true,
+        role: true,
       },
     });
     if (!user) {
@@ -76,7 +76,7 @@ export const Login = async (req, res) => {
     const userId = user.id;
     const name = user.name;
     const email = user.email;
-    const role = user.roles[0].name;
+    const role = user.role;
     const accessToken = jwt.sign(
       { userId, name, email, role },
       process.env.ACCESS_TOKEN_SECRET,

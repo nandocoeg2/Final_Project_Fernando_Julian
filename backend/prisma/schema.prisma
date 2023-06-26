@@ -19,7 +19,12 @@ model Role {
 
 model User {
   id     Int    @id @default(autoincrement())
+  email  String @unique
   name   String
+  password String
+  refreshToken String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   roleId Int?
   role   Role?  @relation(fields: [roleId], references: [id])
 }
@@ -27,6 +32,7 @@ model User {
 model Menu {
   id      Int    @id @default(autoincrement())
   name    String
+  url     String
   roles   Role[] @relation("RoleToMenu")
 }
 
