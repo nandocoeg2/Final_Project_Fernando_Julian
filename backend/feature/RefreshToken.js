@@ -12,7 +12,6 @@ export const refreshToken = async (req, res) => {
         refreshToken: refreshToken,
       },
     });
-    console.log(user);
     if (!user) {
       return res.status(403);
     }
@@ -26,15 +25,16 @@ export const refreshToken = async (req, res) => {
         const userId = decoded.userId;
         const name = decoded.name;
         const email = decoded.email;
+        const role = decoded.roles;
         const accessToken = jwt.sign(
-          { userId, name, email },
+          { userId, name, email, role },
           process.env.ACCESS_TOKEN_SECRET,
           {
             expiresIn: "30s",
           }
         );
         const refreshToken = jwt.sign(
-          { userId, name, email },
+          { userId, name, email, role },
           process.env.REFRESH_TOKEN_SECRET,
           {
             expiresIn: "1d",

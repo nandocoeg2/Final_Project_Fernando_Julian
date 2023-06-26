@@ -7,6 +7,11 @@ export const getUsers = async (req, res) => {
       id: true,
       name: true,
       email: true,
+      roles: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
   res.json(users);
@@ -37,6 +42,11 @@ export const Register = async (req, res) => {
         name,
         email,
         password: hashPassword,
+        roles: {
+          connect: {
+            name: "user",
+          },
+        },
       },
     });
 
@@ -52,6 +62,9 @@ export const Login = async (req, res) => {
       where: {
         email: req.body.email,
       },
+      include: {
+        roles: true,
+      },
     });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -63,15 +76,16 @@ export const Login = async (req, res) => {
     const userId = user.id;
     const name = user.name;
     const email = user.email;
+    const role = user.roles[0].name;
     const accessToken = jwt.sign(
-      { userId, name, email },
+      { userId, name, email, role },
       process.env.ACCESS_TOKEN_SECRET,
       {
         expiresIn: "30s",
       }
     );
     const refreshToken = jwt.sign(
-      { userId, name, email },
+      { userId, name, email, role },
       process.env.REFRESH_TOKEN_SECRET,
       {
         expiresIn: "1d",
@@ -101,13 +115,13 @@ export const Logout = async (req, res) => {
     return res.status(401).json({ error: "You are not authenticated" });
   }
 
-  const user = await prisma.user.findFirst({
-    where: {
-      refreshToken: refreshToken,
-    },
-  });
+  // const user = await prisma.user.findFirst({
+  //   where: {
+  //     refreshToken: refreshToken,
+  //   },
+  // });
 
-  console.log(user);
+  // console.log(user);
 
   // await prisma.user.update({
   //   where: {
