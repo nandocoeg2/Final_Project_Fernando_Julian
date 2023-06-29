@@ -24,9 +24,7 @@ const Dashboard = () => {
     try {
       const response = await refreshToken();
       setToken(response.data.accessToken);
-      console.log("ini hasil token", response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
-      console.log("ini hasil decode", decoded);
       setName(decoded.name);
       setExpire(decoded.exp);
       setRole(decoded.role);
@@ -65,7 +63,7 @@ const Dashboard = () => {
   };
 
   const Logout = async () => {
-    const response = await axiosInstance.delete("http://localhost:2000/logout");
+    const response = await axios.delete("http://localhost:2000/logout");
     console.log(response.data);
     navigate("/login");
   };
