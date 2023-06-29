@@ -1,6 +1,7 @@
 import prisma from "../db/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+
 export const getUsers = async (req, res) => {
   const users = await prisma.user.findMany({
     select: {
@@ -76,7 +77,7 @@ export const Login = async (req, res) => {
     const userId = user.id;
     const name = user.name;
     const email = user.email;
-    const role = user.role;
+    const role = user.role.name;
     const accessToken = jwt.sign(
       { userId, name, email, role },
       process.env.ACCESS_TOKEN_SECRET,
@@ -91,6 +92,8 @@ export const Login = async (req, res) => {
         expiresIn: "1d",
       }
     );
+    const decoded = jwt.decode(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    console.log(decoded);
     await prisma.user.update({
       where: {
         id: userId,
@@ -134,4 +137,30 @@ export const Logout = async (req, res) => {
 
   res.clearCookie("refreshToken");
   res.json({ message: "Logged out" });
+};
+
+export const Menu = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ error: "You are not authenticated" });
+    }
+    const decoded = jwt.decode(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const menu = await prisma.role.findUnique({
+      where: {
+        name: decoded.role,
+      },
+      select: {
+        menus: {
+          select: {
+            name: true,
+            url: true,
+          },
+        },
+      },
+    });
+    res.json(menu);
+  } catch (error) {
+    console.log(error);
+  }
 };

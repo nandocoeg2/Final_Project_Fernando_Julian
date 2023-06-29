@@ -1,5 +1,5 @@
 import Express from "express";
-import { Login, Logout, Register, getUsers } from "../feature/Users.js";
+import { Login, Logout, Menu, Register, getUsers } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../feature/RefreshToken.js";
 
@@ -9,5 +9,6 @@ router.post("/users", Register);
 router.post("/login", Login);
 router.get("/token", refreshToken);
 router.delete("/logout", Logout);
+router.get("/menu", Menu);
 
 export default router;

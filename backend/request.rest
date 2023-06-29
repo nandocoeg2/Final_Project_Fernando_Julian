@@ -1,5 +1,5 @@
 GET http://localhost:2000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNjg3NzUwNjYwLCJleHAiOjE2ODc3NTA2OTB9.NWaj_N11E9FfUnT8qRhg9659opvOA_eE7lcOCBYxVy0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjg4MDYxMjQwLCJleHAiOjE2ODgwNjEyNzB9.IxzcWP7MRcQIwe4frB8cRZ4O_Opgy4yxmmxowR0CGvA
 ####
 POST http://localhost:2000/users
 Content-Type: application/json
@@ -23,3 +23,6 @@ GET http://localhost:2000/token
 
 ###
 DELETE http://localhost:2000/logout
+
+###
+GET http://localhost:2000/menu

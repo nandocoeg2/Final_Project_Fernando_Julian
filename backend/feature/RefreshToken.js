@@ -25,7 +25,7 @@ export const refreshToken = async (req, res) => {
         const userId = decoded.userId;
         const name = decoded.name;
         const email = decoded.email;
-        const role = decoded.roles;
+        const role = decoded.role;
         const accessToken = jwt.sign(
           { userId, name, email, role },
           process.env.ACCESS_TOKEN_SECRET,
