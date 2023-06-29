@@ -34,5 +34,14 @@ model Menu {
   name    String
   url     String
   roles   Role[] @relation("RoleToMenu")
+  subMenus SubMenu[]
+}
+
+model SubMenu {
+  id      Int    @id @default(autoincrement())
+  name    String
+  url     String
+  menuId  Int?
+  menu    Menu?  @relation(fields: [menuId], references: [id])
 }
 

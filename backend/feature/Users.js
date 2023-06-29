@@ -93,7 +93,6 @@ export const Login = async (req, res) => {
       }
     );
     const decoded = jwt.decode(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    console.log(decoded);
     await prisma.user.update({
       where: {
         id: userId,
@@ -153,8 +152,16 @@ export const Menu = async (req, res) => {
       select: {
         menus: {
           select: {
+            id: true,
             name: true,
             url: true,
+            subMenus: {
+              select: {
+                id: true,
+                name: true,
+                url: true,
+              },
+            },
           },
         },
       },
