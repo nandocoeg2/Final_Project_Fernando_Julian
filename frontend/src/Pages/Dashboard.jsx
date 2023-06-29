@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
+  const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,9 +24,13 @@ const Dashboard = () => {
     try {
       const response = await refreshToken();
       setToken(response.data.accessToken);
+      console.log("ini hasil token", response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
+      console.log("ini hasil decode", decoded);
       setName(decoded.name);
       setExpire(decoded.exp);
+      setRole(decoded.role);
+      // console.log("ini hasil decode", decoded);
     } catch (error) {
       navigate("/login");
     }
@@ -41,6 +46,7 @@ const Dashboard = () => {
         const decoded = jwt_decode(response.data.accessToken);
         setName(decoded.name);
         setExpire(decoded.exp);
+        setRole(decoded.role);
       }
       return config;
     },
@@ -82,7 +88,7 @@ const Dashboard = () => {
         <div className="flex-1 bg-white p-8">
           <div className="container">
             <h2 className="text-2xl font-semibold mb-6">
-              Welcome to Dashboard! {name} {expire}
+              Welcome to Dashboard! {name} {expire} {role}
             </h2>
             <button onClick={getUsers} className="btn">
               Get

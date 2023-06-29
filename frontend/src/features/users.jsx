@@ -28,11 +28,19 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    menu: builder.mutation({
+      query: () => ({
+        url: "/menu",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useRefreshTokenMutation, // Add this line
+  useRefreshTokenMutation,
+  useMenuMutation,
 } = userApi;
