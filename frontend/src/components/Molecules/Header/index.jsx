@@ -1,25 +1,22 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const Header = ({ handleSearch }) => {
+const Header = () => {
+  const navigate = useNavigate();
+  const Logout = async () => {
+    const response = await axios.delete("http://localhost:2000/logout");
+    console.log(response.data);
+    navigate("/login");
+  };
   return (
     <>
       <header className="bg-gray-200 py-4 px-6">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-semibold">Dashboard</h2>
-          {/* Pencarian (Search) */}
-          <form onSubmit={handleSearch}>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="rounded-lg px-3 py-1 mr-2 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-3 rounded-lg focus:outline-none"
-            >
-              Search
-            </button>
-          </form>
+          <button onClick={Logout} className="btn">
+            Logout
+          </button>
         </div>
       </header>
     </>

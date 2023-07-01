@@ -62,20 +62,10 @@ const Dashboard = () => {
     console.log(response.data);
   };
 
-  const Logout = async () => {
-    const response = await axios.delete("http://localhost:2000/logout");
-    console.log(response.data);
-    navigate("/login");
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Searching...");
-  };
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <Header handleSearch={handleSearch} />
+      <Header />
 
       {/* Konten Dashboard */}
       <div className="flex flex-1">
@@ -90,9 +80,6 @@ const Dashboard = () => {
             </h2>
             <button onClick={getUsers} className="btn">
               Get
-            </button>
-            <button onClick={Logout} className="btn">
-              Logout
             </button>
           </div>
         </div>
