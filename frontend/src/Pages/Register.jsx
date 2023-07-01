@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useRegisterMutation } from "../features/users";
 import { useNavigate } from "react-router-dom";
 
-const RegisterPage = () => {
+export const RegisterPage = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: "",
@@ -69,5 +69,3 @@ const RegisterPage = () => {
     </div>
   );
 };
-
-export default RegisterPage;

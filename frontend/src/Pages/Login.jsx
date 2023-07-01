@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../features/users";
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: "",
@@ -60,5 +60,3 @@ const LoginPage = () => {
     </div>
   );
 };
-
-export default LoginPage;

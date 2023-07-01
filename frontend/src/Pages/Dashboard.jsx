@@ -7,7 +7,7 @@ import { useRefreshTokenMutation } from "../features/users";
 import axios from "axios";
 import { axiosInstance } from "../app/axios";
 
-const Dashboard = () => {
+export const Dashboard = () => {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
@@ -87,5 +87,3 @@ const Dashboard = () => {
     </div>
   );
 };
-
-export default Dashboard;

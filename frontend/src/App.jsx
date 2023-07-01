@@ -2,10 +2,16 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./app/store";
-import LoginPage from "./Pages/Login";
-import RegisterPage from "./Pages/Register";
-import Dashboard from "./Pages/Dashboard";
-
+import {
+  LoginPage,
+  RegisterPage,
+  Dashboard,
+  Profiles,
+  Operator,
+  FileUpload,
+  Report,
+  Approval,
+} from "./Pages/index";
 const App = () => {
   return (
     <Provider store={store}>
@@ -14,6 +20,11 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profiles />} />
+          <Route path="/operator" element={<Operator />} />
+          <Route path="/upload" element={<FileUpload />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/approval" element={<Approval />} />
         </Routes>
       </Router>
     </Provider>

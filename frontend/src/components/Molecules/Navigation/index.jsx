@@ -14,7 +14,6 @@ const Navigation = () => {
   const responseMenu = async () => {
     try {
       const response = await getMenu();
-      console.log(response.data.menus);
       setMenu(response.data.menus);
     } catch (error) {
       console.log(error);
