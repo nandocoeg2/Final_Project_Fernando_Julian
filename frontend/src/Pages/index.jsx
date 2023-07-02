@@ -6,3 +6,4 @@ export * from "./Profiles";
 export * from "./Register";
 export * from "./Operator";
 export * from "./Report";
+export * from "./Landing";
