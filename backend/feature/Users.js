@@ -8,6 +8,8 @@ export const getUsers = async (req, res) => {
       id: true,
       name: true,
       email: true,
+      createdAt: true,
+      updatedAt: true,
       role: {
         select: {
           name: true,
@@ -19,8 +21,8 @@ export const getUsers = async (req, res) => {
 };
 
 export const Register = async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
+  const { name, email, password, role } = req.body;
+  if (!name || !email || !password || !role) {
     return res.status(400).json({ error: "Please fill all the fields" });
   }
 
@@ -45,7 +47,7 @@ export const Register = async (req, res) => {
         password: hashPassword,
         role: {
           connect: {
-            id: 1,
+            id: role,
           },
         },
       },
