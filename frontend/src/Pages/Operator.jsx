@@ -4,6 +4,7 @@ import Header from "../components/Molecules/Header";
 import {
   useRefreshTokenMutation,
   useRegisterMutation,
+  useDeleteUserMutation,
 } from "../features/users";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +20,7 @@ export const Operator = () => {
   const [users, setUsers] = useState([]);
 
   const [register, { isLoading, error, data }] = useRegisterMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
   const navigate = useNavigate();
 
@@ -67,7 +69,25 @@ export const Operator = () => {
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(response.data);
     setUsers(response.data);
+  };
+
+  const confirmationDialog = (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      deleteUserById(id);
+    }
+  };
+
+  const deleteUserById = async (id) => {
+    try {
+      const response = await deleteUser(id);
+      if (response?.data) {
+        getUsers();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const formik = useFormik({
@@ -94,11 +114,6 @@ export const Operator = () => {
       formik.setFieldValue("role", 0);
     },
   });
-
-  const handleFormInput = (e) => {
-    const { name, value } = e.target;
-    formik.setFieldValue(name, value);
-  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -127,7 +142,10 @@ export const Operator = () => {
                   className="modal-box"
                   onSubmit={formik.handleSubmit}
                 >
-                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  <button
+                    className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                    onClick={() => window.add_operator_modal.close()}
+                  >
                     ✕
                   </button>
                   <h3 className="font-bold text-lg">Add Operator</h3>
@@ -137,7 +155,7 @@ export const Operator = () => {
                     </div>
                     <div className="pb-2 col-span-2">
                       <input
-                        onChange={handleFormInput}
+                        onChange={formik.handleChange}
                         type="text"
                         className="input input-bordered input-sm w-full"
                         placeholder="Name"
@@ -192,7 +210,6 @@ export const Operator = () => {
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
-                    <button className="btn btn-sm">Cancel</button>
                     <button className="btn btn-sm btn-success" type="submit">
                       Save
                     </button>
@@ -233,17 +250,99 @@ export const Operator = () => {
                         </button>
                         {/* Modal Edit Operator */}
                         <dialog id="action_edit_modal" className="modal">
-                          <form method="dialog" className="modal-box">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          <form
+                            method="dialog"
+                            className="modal-box"
+                            onSubmit={formik.handleSubmit}
+                          >
+                            <button
+                              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                              onClick={() => window.action_edit_modal.close()}
+                            >
                               ✕
                             </button>
-                            <h3 className="font-bold text-lg">Hello!</h3>
-                            <p className="py-4">
-                              Press ESC key or click on ✕ button to close
-                            </p>
+                            <h3 className="font-bold text-lg">Add Operator</h3>
+                            <div
+                              id="add_form"
+                              className="grid grid-cols-3 gap-2 py-4"
+                            >
+                              <div className="pb-2">
+                                <label className="form-label">Name</label>
+                              </div>
+                              <div className="pb-2 col-span-2">
+                                <input
+                                  onChange={formik.handleChange}
+                                  type="text"
+                                  className="input input-bordered input-sm w-full"
+                                  placeholder="Name"
+                                  name="name"
+                                  value={formik.values.name}
+                                />
+                              </div>
+                              <div className="pb-2">
+                                <label className="form-label">
+                                  Profile Code
+                                </label>
+                              </div>
+                              <div className="pb-2 col-span-2">
+                                <select
+                                  defaultValue={0}
+                                  className="select select-bordered w-full select-sm"
+                                  value={formik.values.role}
+                                  name="role"
+                                  onChange={formik.handleChange}
+                                >
+                                  <option disabled selected value={0}>
+                                    Select Profile Code
+                                  </option>
+                                  <option value={1}>Admin</option>
+                                  <option value={2}>Operator</option>
+                                  <option value={3}>Maker</option>
+                                </select>
+                              </div>
+                              <div className="pb-2">
+                                <label className="form-label">Email</label>
+                              </div>
+                              <div className="pb-2 col-span-2">
+                                <input
+                                  onChange={formik.handleChange}
+                                  type="email"
+                                  className="input input-bordered input-sm w-full"
+                                  placeholder="Email"
+                                  name="email"
+                                  value={formik.values.email}
+                                />
+                              </div>
+                              <div className="pb-2">
+                                <label className="form-label">Password</label>
+                              </div>
+                              <div className="pb-2 col-span-2">
+                                <input
+                                  onChange={formik.handleChange}
+                                  type="password"
+                                  className="input input-bordered input-sm w-full"
+                                  placeholder="Password"
+                                  name="password"
+                                  value={formik.values.password}
+                                />
+                              </div>
+                            </div>
+                            <div className="flex justify-end gap-2 mt-4">
+                              <button
+                                className="btn btn-sm btn-success"
+                                type="submit"
+                              >
+                                Save
+                              </button>
+                            </div>
                           </form>
                         </dialog>
-                        <button className="btn btn-sm btn-error">Delete</button>
+                        <button
+                          className="btn btn-sm btn-error"
+                          onClick={() => confirmationDialog(user.id)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}

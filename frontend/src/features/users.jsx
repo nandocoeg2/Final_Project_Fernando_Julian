@@ -35,6 +35,13 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -43,4 +50,5 @@ export const {
   useRegisterMutation,
   useRefreshTokenMutation,
   useMenuMutation,
+  useDeleteUserMutation,
 } = userApi;
