@@ -173,3 +173,18 @@ export const Menu = async (req, res) => {
     console.log(error);
   }
 };
+
+export const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  try {
+    const deletedUser = await prisma.user.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.send(`User deleted ${deletedUser.name} successfully`);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};

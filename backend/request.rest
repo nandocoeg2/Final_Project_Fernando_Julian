@@ -6,9 +6,9 @@ Content-Type: application/json
 
 {
     "name": "John Doe",
-    "email": "maker3@gmail.com",
+    "email": "admin@gmail.com",
     "password": "123456",
-    "role": 3
+    "role": 1
 }
 ###
 POST http://localhost:2000/login
@@ -27,3 +27,7 @@ DELETE http://localhost:2000/logout
 
 ###
 GET http://localhost:2000/menu
+
+###
+DELETE http://localhost:2000/users?id=11
+
