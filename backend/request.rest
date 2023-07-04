@@ -29,5 +29,15 @@ DELETE http://localhost:2000/logout
 GET http://localhost:2000/menu
 
 ###
-DELETE http://localhost:2000/users?id=11
+DELETE http://localhost:2000/users/525
 
+###
+PATCH http://localhost:2000/users/26
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "admin123@gmail.com",
+    "password": "123456",
+    "role": 1
+}

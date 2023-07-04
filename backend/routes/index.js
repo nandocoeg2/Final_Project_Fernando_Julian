@@ -6,6 +6,7 @@ import {
   Register,
   deleteUser,
   getUsers,
+  updateUser,
 } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../feature/RefreshToken.js";
@@ -18,5 +19,6 @@ router.get("/token", refreshToken);
 router.delete("/logout", Logout);
 router.get("/menu", Menu);
 router.delete("/users/:id", deleteUser);
+router.patch("/users/:id", updateUser);
 
 export default router;

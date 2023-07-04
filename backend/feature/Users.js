@@ -188,3 +188,29 @@ export const deleteUser = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+export const updateUser = async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  const { name, email, password, role } = req.body;
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        name,
+        email,
+        password,
+        role: {
+          connect: {
+            id: parseInt(role),
+          },
+        },
+      },
+    });
+    res.send(`User updated ${updatedUser.name} successfully`);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
