@@ -28,7 +28,6 @@ export const Dashboard = () => {
       setName(decoded.name);
       setExpire(decoded.exp);
       setRole(decoded.role);
-      // console.log("ini hasil decode", decoded);
     } catch (error) {
       navigate("/login");
     }

@@ -42,6 +42,14 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    updateUser: builder.mutation({
+      query: ({ id, userData }) => ({
+        url: `/users/${id}`,
+        method: "PATCH",
+        body: userData,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -51,4 +59,5 @@ export const {
   useRefreshTokenMutation,
   useMenuMutation,
   useDeleteUserMutation,
+  useUpdateUserMutation,
 } = userApi;

@@ -18,7 +18,7 @@ export const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await register(userData);
+    await register(userData);
     if (!error) {
       isLoading
         ? console.log("Registering...")

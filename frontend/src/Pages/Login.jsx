@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../features/users";
+import { useCookies } from "react-cookie";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(["refreshToken"]);
+  console.log(cookies);
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
