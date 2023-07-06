@@ -214,3 +214,59 @@ export const updateUser = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
+
+export const reportData = async (req, res) => {
+  try {
+    const { name, size, userId, statusReportId, data } = req.body;
+    const report = await prisma.reportUpload.create({
+      data: {
+        name,
+        size,
+        userId,
+        statusReportId,
+        dataUploads: {
+          create: data.map((item) => ({
+            senderName: item[0],
+            senderCity: item[1],
+            senderCountry: item[2],
+            beneficiaryName: item[3],
+            beneficiaryCity: item[4],
+            beneficiaryCountry: item[5],
+          })),
+        },
+      },
+    });
+    res.status(200).send(`Successfully`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getReportData = async (req, res) => {
+  try {
+    const report = await prisma.reportUpload.findMany({
+      select: {
+        id: true,
+        name: true,
+        size: true,
+        uploadByUser: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        statusReport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        dataUploads: true,
+        createdAt: true,
+      },
+    });
+    res.status(200).json(report);
+  } catch (error) {
+    console.log(error);
+  }
+};

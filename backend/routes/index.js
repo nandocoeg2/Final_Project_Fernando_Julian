@@ -5,7 +5,9 @@ import {
   Menu,
   Register,
   deleteUser,
+  getReportData,
   getUsers,
+  reportData,
   updateUser,
 } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
@@ -20,5 +22,7 @@ router.delete("/logout", Logout);
 router.get("/menu", Menu);
 router.delete("/users/:id", deleteUser);
 router.patch("/users/:id", updateUser);
+router.post("/report", reportData);
+router.get("/report", getReportData)
 
 export default router;

@@ -41,3 +41,29 @@ Content-Type: application/json
     "password": "123456",
     "role": 1
 }
+
+
+###
+POST http://localhost:2000/report
+Content-Type: application/json
+
+{
+  "name": "test.csv",
+  "size": 123,
+  "userId": 1,
+  "statusReportId": 1,
+  "data": [
+    ["Adi", "Jakarta", "Indonesia", "Adi", "Jakarta", "Indonesia"],
+    ["Ari", "Stockholm", "Swedia", "Ari", "Stockholm", "Swedia"],
+    ["Ani", "Helsinki", "Finlandia", "Ani", "Helsinki", "Finlandia"],
+    ["Jaka", "Berlin", "Jerman", "Jaka", "Berlin", "Jerman"]
+  ]
+}
+
+###
+GET http://localhost:2000/report
+
+
+
+      
+        

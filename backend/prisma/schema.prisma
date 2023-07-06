@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,37 +8,72 @@ datasource db {
 }
 
 model Role {
-  id     Int    @id @default(autoincrement())
-  name   String @unique
-  users  User[]
-  menus  Menu[] @relation("RoleToMenu")
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[]
+  menus Menu[] @relation("RoleToMenu")
 }
 
 model User {
-  id     Int    @id @default(autoincrement())
-  email  String @unique
-  name   String
-  password String
-  refreshToken String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  roleId Int?
-  role   Role?  @relation(fields: [roleId], references: [id])
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  name          String
+  password      String
+  refreshToken  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  roleId        Int?
+  reportUploads ReportUpload[]
+  role          Role?          @relation(fields: [roleId], references: [id])
 }
 
 model Menu {
-  id      Int    @id @default(autoincrement())
-  name    String
-  url     String
-  roles   Role[] @relation("RoleToMenu")
+  id       Int       @id @default(autoincrement())
+  name     String
+  url      String
   subMenus SubMenu[]
+  roles    Role[]    @relation("RoleToMenu")
 }
 
 model SubMenu {
-  id      Int    @id @default(autoincrement())
-  name    String
-  url     String
-  menuId  Int?
-  menu    Menu?  @relation(fields: [menuId], references: [id])
+  id     Int    @id @default(autoincrement())
+  name   String
+  url    String
+  menuId Int
+  menu   Menu   @relation(fields: [menuId], references: [id])
 }
 
+model statusReport {
+  id            Int            @id @default(autoincrement())
+  name          String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  reportUploads ReportUpload[]
+}
+
+model ReportUpload {
+  id             Int           @id @default(autoincrement())
+  name           String
+  size           Int
+  userId         Int
+  uploadByUser   User          @relation(fields: [userId], references: [id])
+  statusReportId Int?
+  statusReport   statusReport? @relation(fields: [statusReportId], references: [id])
+  dataUploads    DataUpload[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model DataUpload {
+  id                 Int           @id @default(autoincrement())
+  reportUploadId     Int?
+  senderName         String
+  senderCity         String
+  senderCountry      String
+  beneficiaryName    String
+  beneficiaryCity    String
+  beneficiaryCountry String
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  reportUpload       ReportUpload? @relation(fields: [reportUploadId], references: [id])
+}
