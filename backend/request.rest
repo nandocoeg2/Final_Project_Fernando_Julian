@@ -6,9 +6,9 @@ Content-Type: application/json
 
 {
     "name": "John Doe",
-    "email": "admin@gmail.com",
+    "email": "maker@gmail.com",
     "password": "123456",
-    "role": 1
+    "role": 3
 }
 ###
 POST http://localhost:2000/login
@@ -50,7 +50,7 @@ Content-Type: application/json
 {
   "name": "test.csv",
   "size": 123,
-  "userId": 1,
+  "userId": 3,
   "statusReportId": 1,
   "data": [
     ["Adi", "Jakarta", "Indonesia", "Adi", "Jakarta", "Indonesia"],
@@ -62,6 +62,10 @@ Content-Type: application/json
 
 ###
 GET http://localhost:2000/report
+
+###
+GET http://localhost:2000/report/3
+
 
 
 

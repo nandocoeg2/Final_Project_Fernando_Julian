@@ -270,3 +270,36 @@ export const getReportData = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getReportDataByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const report = await prisma.reportUpload.findMany({
+      where: {
+        userId: parseInt(userId),
+      },
+      select: {
+        id: true,
+        name: true,
+        size: true,
+        uploadByUser: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        statusReport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        dataUploads: true,
+        createdAt: true,
+      },
+    });
+    res.status(200).json(report);
+  } catch (error) {
+    console.log(error);
+  }
+};

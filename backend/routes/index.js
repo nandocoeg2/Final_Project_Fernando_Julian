@@ -6,6 +6,7 @@ import {
   Register,
   deleteUser,
   getReportData,
+  getReportDataByUserId,
   getUsers,
   reportData,
   updateUser,
@@ -23,6 +24,7 @@ router.get("/menu", Menu);
 router.delete("/users/:id", deleteUser);
 router.patch("/users/:id", updateUser);
 router.post("/report", reportData);
-router.get("/report", getReportData)
+router.get("/report", getReportData);
+router.get("/report/:userId", getReportDataByUserId);
 
 export default router;
