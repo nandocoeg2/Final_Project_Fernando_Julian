@@ -57,7 +57,7 @@ model ReportUpload {
   size           Int
   userId         Int
   uploadByUser   User          @relation(fields: [userId], references: [id])
-  statusReportId Int?
+  statusReportId Int?          @default(1)
   statusReport   statusReport? @relation(fields: [statusReportId], references: [id])
   dataUploads    DataUpload[]
   createdAt      DateTime      @default(now())

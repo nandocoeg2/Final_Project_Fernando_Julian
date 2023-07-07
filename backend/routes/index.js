@@ -6,6 +6,7 @@ import {
   Register,
   deleteUser,
   getReportData,
+  getReportDataById,
   getReportDataByUserId,
   getUsers,
   reportData,
@@ -26,5 +27,6 @@ router.patch("/users/:id", updateUser);
 router.post("/report", reportData);
 router.get("/report", getReportData);
 router.get("/report/:userId", getReportDataByUserId);
+router.get("/detail/:dataId", getReportDataById);
 
 export default router;

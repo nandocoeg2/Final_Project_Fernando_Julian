@@ -303,3 +303,36 @@ export const getReportDataByUserId = async (req, res) => {
     console.log(error);
   }
 };
+
+export const getReportDataById = async (req, res) => {
+  try {
+    const dataId = req.params.dataId;
+    const report = await prisma.reportUpload.findUnique({
+      where: {
+        id: parseInt(dataId),
+      },
+      select: {
+        id: true,
+        name: true,
+        size: true,
+        uploadByUser: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        statusReport: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        dataUploads: true,
+        createdAt: true,
+      },
+    });
+    res.status(200).json(report);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -48,10 +48,9 @@ POST http://localhost:2000/report
 Content-Type: application/json
 
 {
-  "name": "test.csv",
+  "name": "asdasdsad.csv",
   "size": 123,
   "userId": 3,
-  "statusReportId": 1,
   "data": [
     ["Adi", "Jakarta", "Indonesia", "Adi", "Jakarta", "Indonesia"],
     ["Ari", "Stockholm", "Swedia", "Ari", "Stockholm", "Swedia"],
@@ -64,8 +63,10 @@ Content-Type: application/json
 GET http://localhost:2000/report
 
 ###
-GET http://localhost:2000/report/3
+GET http://localhost:2000/report/
 
+###
+GET http://localhost:2000/detail/11
 
 
 
