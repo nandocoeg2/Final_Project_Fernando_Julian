@@ -50,6 +50,28 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    getReportData: builder.mutation({
+      query: () => ({
+        url: "/report",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+    getReportDataByUserId: builder.mutation({
+      query: (id) => ({
+        url: `/report/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+    addReportData: builder.mutation({
+      query: (reportData) => ({
+        url: "/report",
+        method: "POST",
+        body: reportData,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -60,4 +82,7 @@ export const {
   useMenuMutation,
   useDeleteUserMutation,
   useUpdateUserMutation,
+  useGetReportDataMutation,
+  useGetReportDataByUserIdMutation,
+  useAddReportDataMutation,
 } = userApi;

@@ -3,7 +3,10 @@ import Navigation from "../components/Molecules/Navigation";
 import Header from "../components/Molecules/Header";
 import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
-import { useRefreshTokenMutation } from "../features/users";
+import {
+  useRefreshTokenMutation,
+  useAddReportDataMutation,
+} from "../features/users";
 import axios from "axios";
 import { axiosInstance } from "../app/axios";
 import jwt_decode from "jwt-decode";
@@ -13,6 +16,7 @@ export const FileUpload = () => {
   const isUploadDisabled = !selectedFile;
   const [CSVData, setCSVData] = useState();
   const [name, setName] = useState("");
+  const [userId, setUserId] = useState("");
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [fileError, setFileError] = useState("");
@@ -35,18 +39,27 @@ export const FileUpload = () => {
     if (selectedFile) {
       Papa.parse(selectedFile, {
         skipEmptyLines: true,
+        header: false,
         complete: (results) => {
           setCSVData(results.data);
-          console.log(results.data);
-
           const reportData = {
             name: selectedFile.name,
             size: selectedFile.size,
-            type: selectedFile.type,
-            uploadBy: name,
-            totalRecord: results.data.length,
+            userId: userId,
+            data: results.data.slice(1),
           };
           console.log(reportData);
+          const addReport = async () => {
+            try {
+              await addReportData(reportData);
+              setTimeout(() => {
+                navigate("/report");
+              }, 1000);
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          addReport();
         },
         error: (error) => {
           console.log("Error parsing CSV:", error);
@@ -54,11 +67,13 @@ export const FileUpload = () => {
       });
     }
   };
+
   useEffect(() => {
     responseToken();
   }, []);
 
   const [refreshToken] = useRefreshTokenMutation();
+  const [addReportData] = useAddReportDataMutation();
 
   const responseToken = async () => {
     try {
@@ -66,6 +81,7 @@ export const FileUpload = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setName(decoded.name);
+      setUserId(decoded.userId);
       setExpire(decoded.exp);
     } catch (error) {
       navigate("/login");
@@ -81,6 +97,7 @@ export const FileUpload = () => {
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
         setName(decoded.name);
+        setUserId(decoded.userId);
         setExpire(decoded.exp);
       }
       return config;
