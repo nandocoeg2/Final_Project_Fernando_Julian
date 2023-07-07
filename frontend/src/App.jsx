@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  HashRouter,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./app/store";
 import {
@@ -13,6 +18,7 @@ import {
   Approval,
   LandingPage,
 } from "./Pages/index";
+import DetailReport from "./Pages/DetailReport";
 const App = () => {
   return (
     <Provider store={store}>
@@ -27,6 +33,7 @@ const App = () => {
           <Route path="/upload" element={<FileUpload />} />
           <Route path="/report" element={<Report />} />
           <Route path="/approval" element={<Approval />} />
+          <Route path="/report/detail/:dataId" element={<DetailReport />} />
         </Routes>
       </Router>
     </Provider>

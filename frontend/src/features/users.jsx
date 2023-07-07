@@ -64,6 +64,13 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    getReportDataByDataId: builder.query({
+      query: (id) => ({
+        url: `/detail/${id}`,
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
     addReportData: builder.mutation({
       query: (reportData) => ({
         url: "/report",
@@ -84,5 +91,6 @@ export const {
   useUpdateUserMutation,
   useGetReportDataMutation,
   useGetReportDataByUserIdMutation,
+  useGetReportDataByDataIdQuery,
   useAddReportDataMutation,
 } = userApi;
