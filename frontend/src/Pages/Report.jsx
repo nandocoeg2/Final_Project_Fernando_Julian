@@ -8,6 +8,7 @@ import axios from "axios";
 export const Report = () => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState(0);
+  const [role, setRole] = useState("");
   const [report, setReport] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,25 +28,40 @@ export const Report = () => {
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
       setUserId(decoded.userId);
+      setRole(decoded.role);
     } catch (error) {
       navigate("/login");
     }
   };
 
   const getReport = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:2000/report/${userId}`,
-        {
+    if (role === "admin") {
+      try {
+        const response = await axios.get(`http://localhost:2000/report`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      setReport(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
+        });
+        setReport(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const response = await axios.get(
+          `http://localhost:2000/report/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setReport(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
