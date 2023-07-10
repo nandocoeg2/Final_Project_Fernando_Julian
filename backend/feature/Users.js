@@ -336,3 +336,21 @@ export const getReportDataById = async (req, res) => {
     console.log(error);
   }
 };
+
+export const actionReportData = async (req, res) => {
+  try {
+    const dataId = req.params.dataId;
+    const { statusReportId } = req.body;
+    const report = await prisma.reportUpload.update({
+      where: {
+        id: parseInt(dataId),
+      },
+      data: {
+        statusReportId: parseInt(statusReportId),
+      },
+    });
+    res.status(200).json(report);
+  } catch (error) {
+    console.log(error);
+  }
+};

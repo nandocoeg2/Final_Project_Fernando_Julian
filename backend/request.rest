@@ -68,6 +68,14 @@ GET http://localhost:2000/report/
 ###
 GET http://localhost:2000/detail/11
 
+###
+PATCH http://localhost:2000/detail/11
+Content-Type: application/json
+
+{
+  "statusReportId": 2
+}
+
 
 
       

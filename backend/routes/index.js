@@ -4,6 +4,7 @@ import {
   Logout,
   Menu,
   Register,
+  actionReportData,
   deleteUser,
   getReportData,
   getReportDataById,
@@ -28,5 +29,6 @@ router.post("/report", reportData);
 router.get("/report", getReportData);
 router.get("/report/:userId", getReportDataByUserId);
 router.get("/detail/:dataId", getReportDataById);
+router.patch("/detail/:dataId", actionReportData);
 
 export default router;
