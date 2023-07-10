@@ -7,3 +7,5 @@ export * from "./Register";
 export * from "./Operator";
 export * from "./Report";
 export * from "./Landing";
+export * from "./DetailReport";
+export * from "./DetailApproval";

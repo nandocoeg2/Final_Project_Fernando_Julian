@@ -69,26 +69,31 @@ export const Report = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {reportData.map((report) => (
-                    <tr key={report.id}>
-                      <td>{report.id}</td>
-                      <td>{report.name}</td>
-                      <td>{report.size}</td>
-                      <td>{report.uploadByUser.name}</td>
-                      <td>{report.statusReport.name}</td>
-                      <td>
-                        <a
-                          href={`/report/detail/${report.id}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <button className="btn btn-sm btn-outline">
-                            Detail
-                          </button>
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
+                  {reportData
+                    .filter(
+                      (report) =>
+                        report.statusReport.id === 2 ||
+                        report.statusReport.id === 3
+                    )
+                    .map((report, index) => (
+                      <tr key={report.id}>
+                        <td>{index + 1}</td>
+                        <td>{report.name}</td>
+                        <td>{report.size}</td>
+                        <td>{report.uploadByUser.name}</td>
+                        <td>{report.statusReport.name}</td>
+                        <td>
+                          <a
+                            href={`/report/detail/${report.id}`}
+                            rel="noreferrer"
+                          >
+                            <button className="btn btn-sm btn-outline">
+                              Detail
+                            </button>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             ) : (

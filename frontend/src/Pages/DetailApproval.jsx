@@ -4,7 +4,7 @@ import Navigation from "../components/Molecules/Navigation";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetReportDataByDataIdQuery } from "../features/users";
 
-export const DetailReport = () => {
+export const DetailApproval = () => {
   const { dataId } = useParams();
   const navigate = useNavigate();
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
@@ -89,6 +89,20 @@ export const DetailReport = () => {
                   <span className="loading loading-infinity loading-lg"></span>;
                 </center>
               )}
+            </div>
+            <div className="flex justify-center gap-4">
+              <button
+                className="btn btn-outline btn-success btn-sm w-28"
+                type="submit"
+              >
+                Approve
+              </button>
+              <button
+                className="btn btn-outline btn-error btn-sm w-28"
+                type="submit"
+              >
+                Reject
+              </button>
             </div>
           </div>
         </div>

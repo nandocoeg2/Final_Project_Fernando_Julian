@@ -17,8 +17,9 @@ import {
   Report,
   Approval,
   LandingPage,
+  DetailApproval,
+  DetailReport,
 } from "./Pages/index";
-import DetailReport from "./Pages/DetailReport";
 const App = () => {
   return (
     <Provider store={store}>
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/report" element={<Report />} />
           <Route path="/approval" element={<Approval />} />
           <Route path="/report/detail/:dataId" element={<DetailReport />} />
+          <Route path="/approval/detail/:dataId" element={<DetailApproval />} />
         </Routes>
       </Router>
     </Provider>
