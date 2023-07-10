@@ -4,23 +4,20 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Molecules/Header";
 import Navigation from "../components/Molecules/Navigation";
 import axios from "axios";
+import {
+  useGetReportDataQuery,
+  useGetReportDataByUserIdQuery,
+} from "../features/users";
 
 export const Report = () => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState(0);
   const [role, setRole] = useState("");
-  const [report, setReport] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
-
   useEffect(() => {
     responseToken();
   }, []);
-
-  useEffect(() => {
-    getReport();
-  }, [userId]);
 
   const responseToken = async () => {
     try {
@@ -34,36 +31,15 @@ export const Report = () => {
     }
   };
 
-  const getReport = async () => {
-    if (role === "admin") {
-      try {
-        const response = await axios.get(`http://localhost:2000/report`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setReport(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        const response = await axios.get(
-          `http://localhost:2000/report/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setReport(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  const getReportDataQuery =
+    role === "admin" || "operator"
+      ? useGetReportDataQuery
+      : useGetReportDataByUserIdQuery;
+  const { data: reportData, isError } = getReportDataQuery(userId);
+
+  if (isError) {
+    navigate("/dashboard");
+  }
 
   return (
     <div className="flex flex-col h-screen">
@@ -79,12 +55,7 @@ export const Report = () => {
         <div className="flex-1 bg-white p-8">
           <div className="container p-4 mt-md-4 mt-2 border">
             <h2 className="text-2xl font-semibold mb-6">Report</h2>
-            {loading ? (
-              // Loading spinner
-              <center>
-                <span className="loading loading-infinity loading-lg"></span>
-              </center>
-            ) : (
+            {reportData ? (
               <table className="table w-full">
                 <thead>
                   <tr>
@@ -98,26 +69,32 @@ export const Report = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {report.map((item) => (
-                    <tr key={item.id}>
-                      <td>{item.id}</td>
-                      <td>{item.name}</td>
-                      <td>{item.size}</td>
-                      <td>{item.uploadByUser.name}</td>
-                      <td>{item.statusReport.name}</td>
+                  {reportData.map((report) => (
+                    <tr key={report.id}>
+                      <td>{report.id}</td>
+                      <td>{report.name}</td>
+                      <td>{report.size}</td>
+                      <td>{report.uploadByUser.name}</td>
+                      <td>{report.statusReport.name}</td>
                       <td>
                         <a
-                          href={`/report/detail/${item.id}`}
-                          className="btn btn-outline btn-sm"
+                          href={`/report/detail/${report.id}`}
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          Detail
+                          <button className="btn btn-sm btn-outline">
+                            Detail
+                          </button>
                         </a>
                       </td>
-                      {/* Add more table cells as needed */}
                     </tr>
                   ))}
                 </tbody>
               </table>
+            ) : (
+              <center>
+                <span className="loading loading-infinity loading-lg"></span>;
+              </center>
             )}
           </div>
         </div>
