@@ -10,11 +10,7 @@ export const getUsers = async (req, res) => {
       email: true,
       createdAt: true,
       updatedAt: true,
-      role: {
-        select: {
-          name: true,
-        },
-      },
+      role: true,
     },
   });
   res.json(users);
@@ -349,7 +345,7 @@ export const actionReportData = async (req, res) => {
         statusReportId: parseInt(statusReportId),
       },
     });
-    res.status(200).json(report);
+    res.status(200).send(`Successfully update status report data ${dataId}`);
   } catch (error) {
     console.log(error);
   }

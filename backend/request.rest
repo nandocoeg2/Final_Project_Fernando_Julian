@@ -32,7 +32,7 @@ GET http://localhost:2000/menu
 DELETE http://localhost:2000/users/525
 
 ###
-PATCH http://localhost:2000/users/26
+PATCH http://localhost:2000/users/1006
 Content-Type: application/json
 
 {
