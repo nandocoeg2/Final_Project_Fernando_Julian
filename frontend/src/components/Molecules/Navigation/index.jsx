@@ -29,8 +29,8 @@ const Navigation = () => {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
-      <div className="drawer lg:drawer-open">
+    <div className="h-full flex overflow-hidden bg-gray-100">
+      <div className="h-full drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-center">
           {/* Page content here */}
