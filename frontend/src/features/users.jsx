@@ -79,6 +79,14 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    patchReportData: builder.mutation({
+      query: ({ id, statusReportId }) => ({
+        url: `/detail/${id}`,
+        method: "PATCH",
+        body: statusReportId,
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -93,4 +101,5 @@ export const {
   useGetReportDataByUserIdQuery,
   useGetReportDataByDataIdQuery,
   useAddReportDataMutation,
+  usePatchReportDataMutation,
 } = userApi;

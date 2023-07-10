@@ -2,16 +2,35 @@ import React from "react";
 import Header from "../components/Molecules/Header";
 import Navigation from "../components/Molecules/Navigation";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetReportDataByDataIdQuery } from "../features/users";
+import { useFormik } from "formik";
+import {
+  useGetReportDataByDataIdQuery,
+  usePatchReportDataMutation,
+} from "../features/users";
 
 export const DetailApproval = () => {
   const { dataId } = useParams();
   const navigate = useNavigate();
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
+  const [patchReportData, { isLoading: isPatchLoading, data: patchData }] =
+    usePatchReportDataMutation();
+  const formik = useFormik({
+    initialValues: {
+      statusReportId: "",
+    },
+    onSubmit: async (values) => {
+      const data = {
+        statusReportId: parseInt(values.statusReportId),
+      };
+      await patchReportData({ id: parseInt(dataId), statusReportId: data });
+      navigate(`/report/detail/${dataId}`);
+    },
+  });
 
   if (isError) {
-    navigate("/dashboard");
+    navigate("/dashboard", { replace: true });
   }
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -33,11 +52,13 @@ export const DetailApproval = () => {
               {report ? (
                 <table className="table">
                   <thead>
-                    <td>Upload By</td>
-                    <td>File Name</td>
-                    <td>File Size</td>
-                    <td>Upload Time</td>
-                    <td>Status</td>
+                    <tr>
+                      <th>Upload By</th>
+                      <th>File Name</th>
+                      <th>File Size</th>
+                      <th>Upload Time</th>
+                      <th>Status</th>
+                    </tr>
                   </thead>
                   <tbody>
                     <tr>
@@ -62,13 +83,15 @@ export const DetailApproval = () => {
               {report ? (
                 <table className="table">
                   <thead>
-                    <td>No</td>
-                    <td>Sender Name</td>
-                    <td>Sender City</td>
-                    <td>Sender Coutry</td>
-                    <td>Beneficiary Name</td>
-                    <td>Beneficiary City</td>
-                    <td>Beneficiary Coutry</td>
+                    <tr>
+                      <th>No</th>
+                      <th>Sender Name</th>
+                      <th>Sender City</th>
+                      <th>Sender Coutry</th>
+                      <th>Beneficiary Name</th>
+                      <th>Beneficiary City</th>
+                      <th>Beneficiary Coutry</th>
+                    </tr>
                   </thead>
                   <tbody>
                     {report.dataUploads.map((item, index) => (
@@ -90,19 +113,27 @@ export const DetailApproval = () => {
                 </center>
               )}
             </div>
-            <div className="flex justify-center gap-4">
-              <button
-                className="btn btn-outline btn-success btn-sm w-28"
-                type="submit"
-              >
-                Approve
-              </button>
-              <button
-                className="btn btn-outline btn-error btn-sm w-28"
-                type="submit"
-              >
-                Reject
-              </button>
+            <div className="p-8 my-2">
+              <form onSubmit={formik.handleSubmit}>
+                <div className="flex justify-center gap-4">
+                  <button
+                    className="btn btn-outline btn-success btn-sm w-28"
+                    onClick={() => formik.setFieldValue("statusReportId", 2)}
+                    type="submit"
+                    disabled={isPatchLoading}
+                  >
+                    Approve
+                  </button>{" "}
+                  <button
+                    className="btn btn-outline btn-error btn-sm w-28"
+                    onClick={() => formik.setFieldValue("statusReportId", 3)}
+                    type="submit"
+                    disabled={isPatchLoading}
+                  >
+                    Reject
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
