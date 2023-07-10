@@ -30,60 +30,64 @@ const Navigation = () => {
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
-      <div className="flex flex-col w-64">
-        <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-          <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-            <nav className="flex-1 px-2 space-y-1">
-              {menu.map((item) => (
-                <div key={item.id}>
-                  {item.subMenus.length > 0 ? (
-                    <>
-                      <a
-                        href={item.url}
-                        className={`flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 hover:text-gray-900 ${
-                          openSubMenus.includes(item.id)
-                            ? "bg-gray-200 text-gray-900"
-                            : ""
-                        }`}
-                        onClick={() => toggleSubMenu(item.id)}
-                      >
-                        {item.name}
-                      </a>
-                      <div
-                        className={`ml-6 ${
-                          openSubMenus.includes(item.id) ? "block" : "hidden"
-                        }`}
-                      >
-                        {item.subMenus.map((subMenu) => (
-                          <a
-                            key={subMenu.id}
-                            href={subMenu.url}
-                            className="flex items-center px-6 py-2 text-sm text-gray-500 hover:text-gray-900"
-                          >
-                            {subMenu.name}
-                          </a>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col items-center justify-center">
+          {/* Page content here */}
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden"
+          >
+            Open Menu
+          </label>
+        </div>
+        <div className="drawer-side">
+          <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+          <ul className="menu p-4 w-64 h-full bg-base-200 text-base-content">
+            {/* Sidebar content here */}
+            {menu.map((item) => (
+              <div key={item.id}>
+                {item.subMenus.length > 0 ? (
+                  <>
                     <a
                       href={item.url}
-                      className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+                      className={`flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 hover:text-gray-900 ${
+                        openSubMenus.includes(item.id)
+                          ? "bg-gray-200 text-gray-900"
+                          : ""
+                      }`}
+                      onClick={() => toggleSubMenu(item.id)}
                     >
                       {item.name}
                     </a>
-                  )}
-                </div>
-              ))}
-            </nav>
-          </div>
-          <div className="flex-shrink-0 flex bg-gray-100 p-4">
-            {/* Add your sidebar footer content here */}
-          </div>
+                    <div
+                      className={`ml-6 ${
+                        openSubMenus.includes(item.id) ? "block" : "hidden"
+                      }`}
+                    >
+                      {item.subMenus.map((subMenu) => (
+                        <a
+                          key={subMenu.id}
+                          href={subMenu.url}
+                          className="flex items-center px-6 py-2 text-sm text-gray-500 hover:text-gray-900"
+                        >
+                          {subMenu.name}
+                        </a>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <a
+                    href={item.url}
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 hover:text-gray-900"
+                  >
+                    {item.name}
+                  </a>
+                )}
+              </div>
+            ))}
+          </ul>
         </div>
-      </div>
-      <div className="flex flex-col flex-1">
-        {/* Add the main content of your page here */}
       </div>
     </div>
   );

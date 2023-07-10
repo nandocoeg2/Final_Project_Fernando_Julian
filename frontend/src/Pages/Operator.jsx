@@ -21,6 +21,7 @@ export const Operator = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [refreshToken] = useRefreshTokenMutation();
   const [register] = useRegisterMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
@@ -31,8 +32,6 @@ export const Operator = () => {
     responseToken();
     getUsers();
   }, []);
-
-  const [refreshToken] = useRefreshTokenMutation();
 
   const responseToken = async () => {
     try {

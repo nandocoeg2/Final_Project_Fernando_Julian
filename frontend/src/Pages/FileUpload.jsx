@@ -31,6 +31,19 @@ export const FileUpload = () => {
     } else {
       setFileError("");
       setSelectedFile(file);
+      if (file) {
+        Papa.parse(file, {
+          skipEmptyLines: true,
+          header: false,
+          complete: (results) => {
+            setCSVData(results.data);
+            console.log(results.data);
+          },
+          error: (error) => {
+            console.log("Error parsing CSV:", error);
+          },
+        });
+      }
     }
   };
 
@@ -148,38 +161,31 @@ export const FileUpload = () => {
                 </button>
               </div>
             </form>
-
             {/* Table Hasil Upload CSV */}
             <div className="mt-4">
               <h2 className="text-lg font-semibold">Hasil Upload</h2>
               <div className="overflow-x-auto">
-                <table className="table-auto w-full">
+                <table className="table w-full">
                   <thead>
                     <tr>
-                      <th className="border px-4 py-2">No</th>
                       <th className="border px-4 py-2">Sender Name</th>
                       <th className="border px-4 py-2">Sender City</th>
                       <th className="border px-4 py-2">Sender Country</th>
                       <th className="border px-4 py-2">Beneficiary Name</th>
                       <th className="border px-4 py-2">Beneficiary City</th>
                       <th className="border px-4 py-2">Beneficiary Country</th>
-                      <th className="border px-4 py-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {CSVData &&
                       CSVData.slice(1).map((data, index) => (
                         <tr key={index}>
-                          <td className="border px-4 py-2">{index + 1}</td>
                           <td className="border px-4 py-2">{data[0]}</td>
                           <td className="border px-4 py-2">{data[1]}</td>
                           <td className="border px-4 py-2">{data[2]}</td>
                           <td className="border px-4 py-2">{data[3]}</td>
                           <td className="border px-4 py-2">{data[4]}</td>
                           <td className="border px-4 py-2">{data[5]}</td>
-                          <td className="border px-4 py-2">
-                            Waiting For Approval
-                          </td>
                         </tr>
                       ))}
                   </tbody>
