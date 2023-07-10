@@ -21,8 +21,7 @@ export const Operator = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [register, { isLoading: isRegistering, error, data }] =
-    useRegisterMutation();
+  const [register] = useRegisterMutation();
   const [deleteUser] = useDeleteUserMutation();
   const [updateUser] = useUpdateUserMutation();
 
@@ -80,15 +79,6 @@ export const Operator = () => {
     }
   };
 
-  const handleEditClick = (id) => {
-    const user = users.find((user) => user.id === id);
-    formik.setFieldValue("name", user.name);
-    formik.setFieldValue("email", user.email);
-    formik.setFieldValue("password", user.password);
-    formik.setFieldValue("role", user.role);
-    window.edit_operator_modal.open();
-  };
-
   const getUsers = async () => {
     try {
       const response = await axiosInstance.get("http://localhost:2000/users", {
@@ -97,6 +87,7 @@ export const Operator = () => {
         },
       });
       setUsers(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -107,19 +98,38 @@ export const Operator = () => {
       name: "",
       email: "",
       password: "",
+      role: 0,
+      id: 0,
     },
     onSubmit: async (values, { resetForm }) => {
-      try {
-        await register({
-          name: values.name,
-          email: values.email,
-          password: values.password,
-          role: parseInt(values.role),
-        });
-        resetForm();
-        getUsers();
-      } catch (error) {
-        console.log(error);
+      values.role = parseInt(values.role.id);
+      if (values.id === 0) {
+        try {
+          await register(values);
+          getUsers();
+          window.add_operator_modal.close();
+          resetForm();
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          console.log(values);
+          await updateUser({
+            id: values.id,
+            userData: {
+              name: values.name,
+              email: values.email,
+              password: values.password,
+              role: values.role,
+            },
+          });
+          getUsers();
+          window.add_operator_modal.close();
+          resetForm();
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   });
@@ -220,6 +230,7 @@ export const Operator = () => {
                         placeholder="Password"
                         name="password"
                         value={formik.values.password}
+                        required
                       />
                     </div>
                   </div>
@@ -261,109 +272,17 @@ export const Operator = () => {
                         <td>{new Date(user.updatedAt).toLocaleString()}</td>
                         <td className="flex gap-3">
                           <button
-                            className="btn btn-sm btn-active"
+                            className="btn btn-sm btn-active w-20"
                             onClick={() => {
-                              window.edit_operator_modal.showModal();
-                              handleEditClick(user.id);
+                              formik.setValues(user);
+                              window.add_operator_modal.showModal();
                             }}
                           >
                             Edit
                           </button>
                           {/* Modal Edit Operator */}
-                          <dialog id="edit_operator_modal" className="modal">
-                            <form
-                              method="dialog"
-                              className="modal-box"
-                              onSubmit={formik.handleSubmit}
-                            >
-                              <button
-                                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                                onClick={() =>
-                                  window.edit_operator_modal.close()
-                                }
-                              >
-                                ✕
-                              </button>
-                              <h3 className="font-bold text-lg">
-                                Add Operator
-                              </h3>
-                              <div
-                                id="add_form"
-                                className="grid grid-cols-3 gap-2 py-4"
-                              >
-                                <div className="pb-2">
-                                  <label className="form-label">Name</label>
-                                </div>
-                                <div className="pb-2 col-span-2">
-                                  <input
-                                    onChange={formik.handleChange}
-                                    type="text"
-                                    className="input input-bordered input-sm w-full"
-                                    placeholder="Name"
-                                    name="name"
-                                    value={formik.values.name}
-                                  />
-                                </div>
-                                <div className="pb-2">
-                                  <label className="form-label">
-                                    Profile Code
-                                  </label>
-                                </div>
-                                <div className="pb-2 col-span-2">
-                                  <select
-                                    defaultValue={0}
-                                    className="select select-bordered w-full select-sm"
-                                    value={formik.values.role}
-                                    name="role"
-                                    onChange={formik.handleChange}
-                                  >
-                                    <option disabled selected value={0}>
-                                      Select Profile Code
-                                    </option>
-                                    <option value={1}>Admin</option>
-                                    <option value={2}>Operator</option>
-                                    <option value={3}>Maker</option>
-                                  </select>
-                                </div>
-                                <div className="pb-2">
-                                  <label className="form-label">Email</label>
-                                </div>
-                                <div className="pb-2 col-span-2">
-                                  <input
-                                    onChange={formik.handleChange}
-                                    type="email"
-                                    className="input input-bordered input-sm w-full"
-                                    placeholder="Email"
-                                    name="email"
-                                    value={formik.values.email}
-                                  />
-                                </div>
-                                <div className="pb-2">
-                                  <label className="form-label">Password</label>
-                                </div>
-                                <div className="pb-2 col-span-2">
-                                  <input
-                                    onChange={formik.handleChange}
-                                    type="password"
-                                    className="input input-bordered input-sm w-full"
-                                    placeholder="Password"
-                                    name="password"
-                                    value={formik.values.password}
-                                  />
-                                </div>
-                              </div>
-                              <div className="flex justify-end gap-2 mt-4">
-                                <button
-                                  className="btn btn-sm btn-success"
-                                  type="submit"
-                                >
-                                  Save
-                                </button>
-                              </div>
-                            </form>
-                          </dialog>
                           <button
-                            className="btn btn-sm btn-error"
+                            className="btn btn-sm btn-error w-20"
                             onClick={() => confirmationDialog(user.id)}
                           >
                             Delete
