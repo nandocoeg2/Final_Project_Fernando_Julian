@@ -136,7 +136,7 @@ export const Logout = async (req, res) => {
   res.json({ message: "Logged out" });
 };
 
-export const Menu = async (req, res) => {
+export const getUserMenu = async (req, res) => {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
@@ -158,6 +158,54 @@ export const Menu = async (req, res) => {
       },
     });
     res.json(menu);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getRoleMenu = async (req, res) => {
+  try {
+    const menu = await prisma.role.findMany({
+      select: {
+        id: true,
+        name: true,
+        menus: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    res.json(menu);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateRoleMenu = async (req, res) => {
+  try {
+    const { roleId, menuIds } = req.body;
+    if (menuIds.length === 0) {
+      return res.status(400).send("Menu is required");
+    }
+    if (!roleId) {
+      return res.status(400).send("Role is required");
+    }
+    const parsedMenuIds = menuIds.map((menuId) => ({
+      id: parseInt(menuId),
+    }));
+    const role = await prisma.role.update({
+      where: {
+        id: parseInt(roleId),
+      },
+      data: {
+        menus: {
+          set: parsedMenuIds,
+        },
+      },
+    });
+    res.status(200).send(`Successfully updated role menu ${roleId}`);
   } catch (error) {
     console.log(error);
   }
@@ -342,34 +390,6 @@ export const actionReportData = async (req, res) => {
       },
     });
     res.status(200).send(`Successfully update status report data ${dataId}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const updateRoleMenu = async (req, res) => {
-  try {
-    const { roleId, menuIds } = req.body;
-    if (menuIds.length === 0) {
-      return res.status(400).send("Menu is required");
-    }
-    if (!roleId) {
-      return res.status(400).send("Role is required");
-    }
-    const parsedMenuIds = menuIds.map((menuId) => ({
-      id: parseInt(menuId),
-    }));
-    const role = await prisma.role.update({
-      where: {
-        id: parseInt(roleId),
-      },
-      data: {
-        menus: {
-          set: parsedMenuIds,
-        },
-      },
-    });
-    res.status(200).send(`Successfully updated role menu ${roleId}`);
   } catch (error) {
     console.log(error);
   }

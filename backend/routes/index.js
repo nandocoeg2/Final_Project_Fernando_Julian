@@ -2,7 +2,7 @@ import Express from "express";
 import {
   Login,
   Logout,
-  Menu,
+  getUserMenu,
   Register,
   actionReportData,
   deleteUser,
@@ -13,6 +13,7 @@ import {
   reportData,
   updateUser,
   updateRoleMenu,
+  getRoleMenu,
 } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../feature/RefreshToken.js";
@@ -23,7 +24,7 @@ router.post("/users", Register);
 router.post("/login", Login);
 router.get("/token", refreshToken);
 router.delete("/logout", Logout);
-router.get("/menu", Menu);
+router.get("/menu", getUserMenu);
 router.delete("/users/:id", deleteUser);
 router.patch("/users/:id", updateUser);
 router.post("/report", reportData);
@@ -32,5 +33,6 @@ router.get("/report/:userId", getReportDataByUserId);
 router.get("/detail/:dataId", getReportDataById);
 router.patch("/detail/:dataId", actionReportData);
 router.post("/menu", updateRoleMenu);
+router.get("/allMenu", getRoleMenu);
 
 export default router;
