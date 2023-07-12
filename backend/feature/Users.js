@@ -197,7 +197,7 @@ export const updateUser = async (req, res) => {
       data: {
         name,
         email,
-        password,
+        password: await bcrypt.hash(password, await bcrypt.genSalt()),
         role: {
           connect: {
             id: parseInt(role),
@@ -259,6 +259,9 @@ export const getReportData = async (req, res) => {
         },
         dataUploads: true,
         createdAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
     res.status(200).json(report);
