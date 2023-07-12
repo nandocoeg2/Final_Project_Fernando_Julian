@@ -31,16 +31,7 @@ model Menu {
   id       Int       @id @default(autoincrement())
   name     String
   url      String
-  subMenus SubMenu[]
   roles    Role[]    @relation("RoleToMenu")
-}
-
-model SubMenu {
-  id     Int    @id @default(autoincrement())
-  name   String
-  url    String
-  menuId Int
-  menu   Menu   @relation(fields: [menuId], references: [id])
 }
 
 model statusReport {
