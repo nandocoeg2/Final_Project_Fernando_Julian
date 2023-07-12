@@ -12,6 +12,7 @@ import {
   getUsers,
   reportData,
   updateUser,
+  updateRoleMenu,
 } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../feature/RefreshToken.js";
@@ -30,5 +31,6 @@ router.get("/report", getReportData);
 router.get("/report/:userId", getReportDataByUserId);
 router.get("/detail/:dataId", getReportDataById);
 router.patch("/detail/:dataId", actionReportData);
+router.post("/menu", updateRoleMenu);
 
 export default router;

@@ -153,13 +153,6 @@ export const Menu = async (req, res) => {
             id: true,
             name: true,
             url: true,
-            subMenus: {
-              select: {
-                id: true,
-                name: true,
-                url: true,
-              },
-            },
           },
         },
       },
@@ -349,6 +342,34 @@ export const actionReportData = async (req, res) => {
       },
     });
     res.status(200).send(`Successfully update status report data ${dataId}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateRoleMenu = async (req, res) => {
+  try {
+    const { roleId, menuIds } = req.body;
+    if (menuIds.length === 0) {
+      return res.status(400).send("Menu is required");
+    }
+    if (!roleId) {
+      return res.status(400).send("Role is required");
+    }
+    const parsedMenuIds = menuIds.map((menuId) => ({
+      id: parseInt(menuId),
+    }));
+    const role = await prisma.role.update({
+      where: {
+        id: parseInt(roleId),
+      },
+      data: {
+        menus: {
+          set: parsedMenuIds,
+        },
+      },
+    });
+    res.status(200).send(`Successfully updated role menu ${roleId}`);
   } catch (error) {
     console.log(error);
   }
