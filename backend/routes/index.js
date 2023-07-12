@@ -14,6 +14,7 @@ import {
   updateUser,
   updateRoleMenu,
   getRoleMenu,
+  getAllMenu,
 } from "../feature/Users.js";
 import { verifyToken } from "../middleware/VerifyToken.js";
 import { refreshToken } from "../feature/RefreshToken.js";
@@ -33,6 +34,7 @@ router.get("/report/:userId", getReportDataByUserId);
 router.get("/detail/:dataId", getReportDataById);
 router.patch("/detail/:dataId", actionReportData);
 router.post("/menu", updateRoleMenu);
-router.get("/allMenu", getRoleMenu);
+router.get("/roleMenu", getRoleMenu);
+router.get("/allMenu", getAllMenu);
 
 export default router;

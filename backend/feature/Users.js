@@ -183,6 +183,20 @@ export const getRoleMenu = async (req, res) => {
   }
 };
 
+export const getAllMenu = async (req, res) => {
+  try {
+    const menu = await prisma.menu.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+    res.json(menu);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateRoleMenu = async (req, res) => {
   try {
     const { roleId, menuIds } = req.body;
