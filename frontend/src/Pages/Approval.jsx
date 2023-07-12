@@ -7,11 +7,15 @@ import jwt_decode from "jwt-decode";
 import {
   useGetReportDataByUserIdQuery,
   useGetReportDataQuery,
+  useRefreshTokenMutation,
 } from "../features/users";
+import { axiosInstance } from "../app/axios";
 
 export const Approval = () => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState(0);
+  const [name, setName] = useState("");
+  const [expire, setExpire] = useState("");
   const [role, setRole] = useState("");
 
   const navigate = useNavigate();
@@ -19,12 +23,15 @@ export const Approval = () => {
     responseToken();
   }, []);
 
+  const [refreshToken] = useRefreshTokenMutation();
+
   const responseToken = async () => {
     try {
-      const response = await axios.get("http://localhost:2000/token");
+      const response = await refreshToken();
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
-      setUserId(decoded.userId);
+      setName(decoded.name);
+      setExpire(decoded.exp);
       setRole(decoded.role);
     } catch (error) {
       navigate("/login");
@@ -62,7 +69,8 @@ export const Approval = () => {
                     <th>ID</th>
                     <th>Name</th>
                     <th>Size</th>
-                    <th>Uploaded By</th>
+                    <th>Uploaded by</th>
+                    <th>Uploaded time</th>
                     <th>Status</th>
                     <th>Detail</th>
                     {/* Add more table headers as needed */}
@@ -77,6 +85,7 @@ export const Approval = () => {
                         <td>{report.name}</td>
                         <td>{report.size}</td>
                         <td>{report.uploadByUser.name}</td>
+                        <td>{new Date(report.createdAt).toLocaleString()}</td>
                         <td>{report.statusReport.name}</td>
                         <td>
                           <a

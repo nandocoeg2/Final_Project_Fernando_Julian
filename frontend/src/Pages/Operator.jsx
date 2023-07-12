@@ -14,10 +14,8 @@ import Header from "../components/Molecules/Header";
 import { useFormik } from "formik";
 
 export const Operator = () => {
-  const [name, setName] = useState("");
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
-  const [role, setRole] = useState("");
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,9 +36,7 @@ export const Operator = () => {
       const response = await refreshToken();
       setToken(response.data.accessToken);
       const decoded = jwt_decode(response.data.accessToken);
-      setName(decoded.name);
       setExpire(decoded.exp);
-      setRole(decoded.role);
     } catch (error) {
       navigate("/login");
     }
@@ -54,9 +50,7 @@ export const Operator = () => {
         config.headers.Authorization = `Bearer ${response.data.accessToken}`;
         setToken(response.data.accessToken);
         const decoded = jwt_decode(response.data.accessToken);
-        setName(decoded.name);
         setExpire(decoded.exp);
-        setRole(decoded.role);
       }
       return config;
     },
@@ -100,20 +94,21 @@ export const Operator = () => {
       role: 0,
       id: 0,
     },
+    preventDefault: true,
     onSubmit: async (values, { resetForm }) => {
-      values.role = parseInt(values.role.id);
       if (values.id === 0) {
         try {
+          values.role = parseInt(values.role);
           await register(values);
           getUsers();
-          window.add_operator_modal.close();
+          window.operator_modal.close();
           resetForm();
         } catch (error) {
           console.log(error);
         }
       } else {
         try {
-          console.log(values);
+          values.role = parseInt(values.role.id);
           await updateUser({
             id: values.id,
             userData: {
@@ -124,7 +119,7 @@ export const Operator = () => {
             },
           });
           getUsers();
-          window.add_operator_modal.close();
+          window.operator_modal.close();
           resetForm();
         } catch (error) {
           console.log(error);
@@ -150,13 +145,13 @@ export const Operator = () => {
               <h2 className="text-2xl font-semibold mb-6">Operator</h2>
               <button
                 className="btn btn-md btn-active"
-                onClick={() => window.add_operator_modal.showModal()}
+                onClick={() => window.operator_modal.showModal()}
               >
                 Add Operator
               </button>
 
               {/* Modal Add Operator */}
-              <dialog id="add_operator_modal" className="modal">
+              <dialog id="operator_modal" className="modal">
                 <form
                   method="dialog"
                   className="modal-box"
@@ -166,7 +161,7 @@ export const Operator = () => {
                     className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                     onClick={(event) => {
                       event.preventDefault();
-                      window.add_operator_modal.close();
+                      window.operator_modal.close();
                     }}
                   >
                     ✕
@@ -274,7 +269,7 @@ export const Operator = () => {
                             className="btn btn-sm btn-active w-20"
                             onClick={() => {
                               formik.setValues(user);
-                              window.add_operator_modal.showModal();
+                              window.operator_modal.showModal();
                             }}
                           >
                             Edit

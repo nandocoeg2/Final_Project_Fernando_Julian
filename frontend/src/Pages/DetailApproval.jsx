@@ -1,16 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Molecules/Header";
 import Navigation from "../components/Molecules/Navigation";
-import { useNavigate, useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 import { useFormik } from "formik";
 import {
   useGetReportDataByDataIdQuery,
   usePatchReportDataMutation,
+  useRefreshTokenMutation,
 } from "../features/users";
+import { axiosInstance } from "../app/axios";
 
 export const DetailApproval = () => {
   const { dataId } = useParams();
+  const [name, setName] = useState("");
+  const [token, setToken] = useState("");
+  const [expire, setExpire] = useState("");
+  const [role, setRole] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    responseToken();
+  }, []);
+
+  const [refreshToken] = useRefreshTokenMutation();
+
+  const responseToken = async () => {
+    try {
+      const response = await refreshToken();
+      setToken(response.data.accessToken);
+      const decoded = jwt_decode(response.data.accessToken);
+      setName(decoded.name);
+      setExpire(decoded.exp);
+      setRole(decoded.role);
+    } catch (error) {
+      navigate("/login");
+    }
+  };
+
+  axiosInstance.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date();
+      if (expire * 1000 < currentDate.getTime()) {
+        const response = await axios.get("http://localhost:2000/token");
+        config.headers.Authorization = `Bearer ${response.data.accessToken}`;
+        setToken(response.data.accessToken);
+        const decoded = jwt_decode(response.data.accessToken);
+        setName(decoded.name);
+        setExpire(decoded.exp);
+        setRole(decoded.role);
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
   const [patchReportData, { isLoading: isPatchLoading, data: patchData }] =
     usePatchReportDataMutation();
@@ -23,7 +68,8 @@ export const DetailApproval = () => {
         statusReportId: parseInt(values.statusReportId),
       };
       await patchReportData({ id: parseInt(dataId), statusReportId: data });
-      navigate(`/report/detail/${dataId}`);
+      navigate(`/report/detail/${dataId}`, { replace: true });
+      window.location.reload();
     },
   });
 
@@ -116,22 +162,30 @@ export const DetailApproval = () => {
             <div className="p-8 my-2">
               <form onSubmit={formik.handleSubmit}>
                 <div className="flex justify-center gap-4">
-                  <button
-                    className="btn btn-outline btn-success btn-sm w-28"
-                    onClick={() => formik.setFieldValue("statusReportId", 2)}
-                    type="submit"
-                    disabled={isPatchLoading}
-                  >
-                    Approve
-                  </button>{" "}
-                  <button
-                    className="btn btn-outline btn-error btn-sm w-28"
-                    onClick={() => formik.setFieldValue("statusReportId", 3)}
-                    type="submit"
-                    disabled={isPatchLoading}
-                  >
-                    Reject
-                  </button>
+                  {report && report.statusReport.id === 1 && (
+                    <>
+                      <button
+                        className="btn btn-outline btn-success btn-sm w-28"
+                        onClick={() =>
+                          formik.setFieldValue("statusReportId", 2)
+                        }
+                        type="submit"
+                        disabled={isPatchLoading}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        className="btn btn-outline btn-error btn-sm w-28"
+                        onClick={() =>
+                          formik.setFieldValue("statusReportId", 3)
+                        }
+                        type="submit"
+                        disabled={isPatchLoading}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
                 </div>
               </form>
             </div>

@@ -36,6 +36,7 @@ const App = () => {
           <Route path="/approval" element={<Approval />} />
           <Route path="/report/detail/:dataId" element={<DetailReport />} />
           <Route path="/approval/detail/:dataId" element={<DetailApproval />} />
+          <Route path="/approval/detail/:dataId" element={<DetailApproval />} />
         </Routes>
       </Router>
     </Provider>
