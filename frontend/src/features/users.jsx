@@ -87,6 +87,28 @@ export const userApi = createApi({
         credentials: "include",
       }),
     }),
+    updateMenu: builder.mutation({
+      query: ({ id, menuData }) => ({
+        url: `/menu/${id}`,
+        method: "PATCH",
+        body: menuData,
+        credentials: "include",
+      }),
+    }),
+    getRoleMenu: builder.query({
+      query: () => ({
+        url: "/roleMenu",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
+    getAllMenu: builder.query({
+      query: () => ({
+        url: "/allMenu",
+        method: "GET",
+        credentials: "include",
+      }),
+    }),
   }),
 });
 
@@ -102,4 +124,7 @@ export const {
   useGetReportDataByDataIdQuery,
   useAddReportDataMutation,
   usePatchReportDataMutation,
+  useUpdateMenuMutation,
+  useGetRoleMenuQuery,
+  useGetAllMenuQuery,
 } = userApi;

@@ -20,6 +20,7 @@ export const FileUpload = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [fileError, setFileError] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,6 +66,7 @@ export const FileUpload = () => {
           const addReport = async () => {
             try {
               await addReportData(reportData);
+              setIsSuccess(true);
               setTimeout(() => {
                 navigate("/report");
               }, 1000);
@@ -119,6 +121,7 @@ export const FileUpload = () => {
       return Promise.reject(error);
     }
   );
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -164,6 +167,13 @@ export const FileUpload = () => {
             {/* Table Hasil Upload CSV */}
             <div className="mt-4">
               <h2 className="text-lg font-semibold">Hasil Upload</h2>
+              {isSuccess && (
+                <div className="toast toast-top toast-center">
+                  <div className="alert alert-success">
+                    <span>Your file has been uploaded!</span>
+                  </div>
+                </div>
+              )}
               <div className="overflow-x-auto">
                 <table className="table w-full">
                   <thead>
