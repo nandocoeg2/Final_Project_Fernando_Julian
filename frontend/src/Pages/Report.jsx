@@ -14,7 +14,7 @@ export const Report = () => {
   const [userId, setUserId] = useState(0);
   const [role, setRole] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Set the number of items per page
+  const [itemsPerPage] = useState(6); // Set the number of items per page
 
   const navigate = useNavigate();
   useEffect(() => {
