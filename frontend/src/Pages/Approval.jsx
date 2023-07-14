@@ -17,6 +17,8 @@ export const Approval = () => {
   const [name, setName] = useState("");
   const [expire, setExpire] = useState("");
   const [role, setRole] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(6); // Set the number of items per page
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -44,6 +46,43 @@ export const Approval = () => {
       : useGetReportDataByUserIdQuery;
   const { data: reportData, isError } = getReportDataQuery(userId);
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = reportData
+    ? reportData
+        .filter((report) => report.statusReport.id === 1)
+        .slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+  const totalPages = reportData
+    ? Math.ceil(
+        reportData.filter((report) => report.statusReport.id === 1).length /
+          itemsPerPage
+      )
+    : 0;
+
+  const renderPaginationButtons = () => {
+    if (totalPages <= 1) return null;
+    const buttons = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          className={`join-item btn ${currentPage === i ? "btn-active" : ""}`}
+          onClick={() => paginate(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return buttons;
+  };
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   if (isError) {
     navigate("/dashboard");
   }
@@ -63,44 +102,53 @@ export const Approval = () => {
           <div className="container p-4 mt-md-4 mt-2 border">
             <h2 className="text-2xl font-semibold mb-6">Approval</h2>
             {reportData ? (
-              <table className="table w-full">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Uploaded by</th>
-                    <th>Uploaded time</th>
-                    <th>Status</th>
-                    <th>Detail</th>
-                    {/* Add more table headers as needed */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {reportData
-                    .filter((report) => report.statusReport.id === 1)
-                    .map((report, index) => (
-                      <tr key={report.id}>
-                        <td>{index + 1}</td>
-                        <td>{report.name}</td>
-                        <td>{report.size}</td>
-                        <td>{report.uploadByUser.name}</td>
-                        <td>{new Date(report.createdAt).toLocaleString()}</td>
-                        <td>{report.statusReport.name}</td>
-                        <td>
-                          <a
-                            href={`/approval/detail/${report.id}`}
-                            rel="noreferrer"
-                          >
-                            <button className="btn btn-sm btn-outline">
-                              Detail
-                            </button>
-                          </a>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              <>
+                <table className="table w-full">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Size</th>
+                      <th>Uploaded by</th>
+                      <th>Uploaded time</th>
+                      <th>Status</th>
+                      <th>Detail</th>
+                      {/* Add more table headers as needed */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentItems
+                      .filter((report) => report.statusReport.id === 1)
+                      .map((report, index) => (
+                        <tr key={report.id}>
+                          <td>{index + 1}</td>
+                          <td>{report.name}</td>
+                          <td>{report.size}</td>
+                          <td>{report.uploadByUser.name}</td>
+                          <td>{new Date(report.createdAt).toLocaleString()}</td>
+                          <td>
+                            <span className="badge badge-warning">
+                              {report.statusReport.name}
+                            </span>
+                          </td>
+                          <td>
+                            <a
+                              href={`/approval/detail/${report.id}`}
+                              rel="noreferrer"
+                            >
+                              <button className="btn btn-sm btn-outline">
+                                Detail
+                              </button>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                <center>
+                  <div className="join">{renderPaginationButtons()}</div>
+                </center>
+              </>
             ) : (
               <center>
                 <span className="loading loading-infinity loading-lg"></span>;
