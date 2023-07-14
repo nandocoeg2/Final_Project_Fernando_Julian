@@ -269,11 +269,11 @@ export const updateUser = async (req, res) => {
 
 export const reportData = async (req, res) => {
   try {
-    const { name, size, userId, statusReportId, data } = req.body;
+    const { name, length, userId, statusReportId, data } = req.body;
     const report = await prisma.reportUpload.create({
       data: {
         name,
-        size,
+        length,
         userId,
         statusReportId,
         dataUploads: {
@@ -300,7 +300,7 @@ export const getReportData = async (req, res) => {
       select: {
         id: true,
         name: true,
-        size: true,
+        length: true,
         uploadByUser: {
           select: {
             id: true,
@@ -336,7 +336,7 @@ export const getReportDataByUserId = async (req, res) => {
       select: {
         id: true,
         name: true,
-        size: true,
+        length: true,
         uploadByUser: {
           select: {
             id: true,
@@ -369,7 +369,7 @@ export const getReportDataById = async (req, res) => {
       select: {
         id: true,
         name: true,
-        size: true,
+        length: true,
         uploadByUser: {
           select: {
             id: true,
@@ -395,13 +395,14 @@ export const getReportDataById = async (req, res) => {
 export const actionReportData = async (req, res) => {
   try {
     const dataId = req.params.dataId;
-    const { statusReportId } = req.body;
+    const { statusReportId, processByUserId } = req.body;
     const report = await prisma.reportUpload.update({
       where: {
         id: dataId,
       },
       data: {
         statusReportId: parseInt(statusReportId),
+        processByUserId: parseInt(processByUserId),
       },
     });
     res.status(200).send(`Successfully update status report data ${dataId}`);

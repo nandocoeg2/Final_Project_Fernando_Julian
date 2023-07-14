@@ -69,14 +69,10 @@ GET http://localhost:2000/report/
 GET http://localhost:2000/detail/11
 
 ###
-PATCH http://localhost:2000/detail/11
+PATCH http://localhost:2000/detail/8ca49b33-c810-41ca-a355-a2864cebf133
 Content-Type: application/json
 
 {
-  "statusReportId": 2
+  "statusReportId": 2,
+  "processByUserId": 3
 }
-
-
-
-      
-        

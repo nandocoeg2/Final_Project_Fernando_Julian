@@ -43,17 +43,20 @@ model statusReport {
 }
 
 model ReportUpload {
-  id             String           @id @default(uuid())
-  name           String
-  size           Int
-  userId         Int
-  uploadByUser   User             @relation(fields: [userId], references: [id])
-  statusReportId Int?             @default(1)
-  statusReport   statusReport?    @relation(fields: [statusReportId], references: [id])
-  dataUploads    DataUpload[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id               String          @id @default(uuid())
+  name             String
+  length           Int
+  userId           Int
+  uploadByUser     User            @relation(fields: [userId], references: [id])
+  processByUserId  Int?
+  processedTime    DateTime?       @updatedAt
+  statusReportId   Int?            @default(1)
+  statusReport     statusReport?   @relation(fields: [statusReportId], references: [id])
+  dataUploads      DataUpload[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 }
+
 
 
 model DataUpload {
