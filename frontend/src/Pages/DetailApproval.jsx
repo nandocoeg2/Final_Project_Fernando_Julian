@@ -67,7 +67,7 @@ export const DetailApproval = () => {
       const data = {
         statusReportId: parseInt(values.statusReportId),
       };
-      await patchReportData({ id: parseInt(dataId), statusReportId: data });
+      await patchReportData({ id: dataId, statusReportId: data });
       navigate(`/report/detail/${dataId}`, { replace: true });
       window.location.reload();
     },
