@@ -29,6 +29,7 @@ export const FileUpload = () => {
     if (file && file.type !== "text/csv") {
       setFileError("Invalid file format. Please select a CSV file.");
       setSelectedFile(null);
+      setCSVData(null);
     } else {
       setFileError("");
       setSelectedFile(file);
@@ -37,8 +38,20 @@ export const FileUpload = () => {
           skipEmptyLines: true,
           header: false,
           complete: (results) => {
-            setCSVData(results.data);
-            console.log(results.data);
+            const parsedData = results.data;
+            const emptyFields = parsedData.some((row) =>
+              row.some((field) => !field.trim())
+            );
+            if (emptyFields) {
+              setFileError(
+                "File contains empty fields. Please check the file and try again."
+              );
+              setCSVData(null);
+              setSelectedFile(null);
+            } else {
+              setCSVData(parsedData);
+            }
+            console.log(parsedData);
           },
           error: (error) => {
             console.log("Error parsing CSV:", error);
