@@ -30,16 +30,18 @@ const Navigation = () => {
             htmlFor="my-drawer-2"
             className="btn btn-primary drawer-button lg:hidden"
           >
-            Open drawer
+            Open Menu
           </label>
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
+          <ul className="menu p-4 w-64 h-full bg-base-200 text-base-content">
             {/* Sidebar content here */}
             {menu.map((item) => (
-              <li key={item.id}>
-                <a href={item.url}>{item.name}</a>
+              <li key={item.id} className="py-1">
+                <a href={item.url} className="text-base font-semibold">
+                  {item.name}
+                </a>
               </li>
             ))}
           </ul>
