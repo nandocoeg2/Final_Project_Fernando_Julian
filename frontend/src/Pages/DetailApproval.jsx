@@ -18,6 +18,7 @@ export const DetailApproval = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [role, setRole] = useState("");
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     responseToken();
@@ -33,6 +34,7 @@ export const DetailApproval = () => {
       setName(decoded.name);
       setExpire(decoded.exp);
       setRole(decoded.role);
+      setUserId(decoded.userId);
     } catch (error) {
       navigate("/login");
     }
@@ -49,6 +51,7 @@ export const DetailApproval = () => {
         setName(decoded.name);
         setExpire(decoded.exp);
         setRole(decoded.role);
+        setUserId(decoded.userId);
       }
       return config;
     },
@@ -57,8 +60,11 @@ export const DetailApproval = () => {
     }
   );
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
-  const [patchReportData, { isLoading: isPatchLoading, data: patchData }] =
+  const [patchReportData, { isLoading: isPatchLoading }] =
     usePatchReportDataMutation();
+  if (report) {
+    console.log(report);
+  }
   const formik = useFormik({
     initialValues: {
       statusReportId: "",
@@ -66,8 +72,10 @@ export const DetailApproval = () => {
     onSubmit: async (values) => {
       const data = {
         statusReportId: parseInt(values.statusReportId),
+        processByUserId: parseInt(userId),
       };
-      await patchReportData({ id: dataId, statusReportId: data });
+      console.log(data);
+      await patchReportData({ id: dataId, data: data });
       navigate(`/report/detail/${dataId}`, { replace: true });
       window.location.reload();
     },
@@ -101,7 +109,7 @@ export const DetailApproval = () => {
                     <tr>
                       <th>Upload By</th>
                       <th>File Name</th>
-                      <th>File Size</th>
+                      <th>Length</th>
                       <th>Upload Time</th>
                       <th>Status</th>
                     </tr>
@@ -110,7 +118,7 @@ export const DetailApproval = () => {
                     <tr>
                       <td>{report.uploadByUser.name}</td>
                       <td>{report.name}</td>
-                      <td>{report.size}</td>
+                      <td>{report.dataUploads.length}</td>
                       <td>{new Date(report.createdAt).toLocaleString()}</td>
                       <td>{report.statusReport.name}</td>
                     </tr>
@@ -118,7 +126,7 @@ export const DetailApproval = () => {
                 </table>
               ) : (
                 <center>
-                  <span className="loading loading-infinity loading-lg"></span>;
+                  <span className="loading loading-infinity loading-lg"></span>
                 </center>
               )}
             </div>
@@ -155,7 +163,7 @@ export const DetailApproval = () => {
                 </table>
               ) : (
                 <center>
-                  <span className="loading loading-infinity loading-lg"></span>;
+                  <span className="loading loading-infinity loading-lg"></span>
                 </center>
               )}
             </div>

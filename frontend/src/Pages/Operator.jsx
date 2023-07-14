@@ -18,6 +18,7 @@ export const Operator = () => {
   const [expire, setExpire] = useState("");
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null); // Track the user ID to be deleted
 
   const [refreshToken] = useRefreshTokenMutation();
   const [register] = useRegisterMutation();
@@ -58,15 +59,18 @@ export const Operator = () => {
       return Promise.reject(error);
     }
   );
+
   const confirmationDialog = (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      deleteUserById(id);
-    }
+    setUserIdToDelete(id);
+    window.my_modal.showModal();
   };
-  const deleteUserById = async (id) => {
+
+  const deleteUserById = async () => {
+    if (!userIdToDelete) return;
     try {
-      await deleteUser(id);
+      await deleteUser(userIdToDelete);
       getUsers();
+      setUserIdToDelete(null);
     } catch (error) {
       console.log(error);
     }
@@ -291,6 +295,26 @@ export const Operator = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <dialog id="my_modal" className="modal">
+        <form method="dialog" className="modal-box">
+          <p className="py-4">Are you sure you want to delete this user?</p>
+          <div className="modal-action">
+            <button
+              className="btn btn-error w-20"
+              onClick={() => {
+                deleteUserById();
+                window.my_modal.close();
+              }}
+            >
+              Yes
+            </button>
+            {/* if there is a button in form, it will close the modal */}
+            <button className="btn btn-outline w-20">Cancel</button>
+          </div>
+        </form>
+      </dialog>
     </div>
   );
 };

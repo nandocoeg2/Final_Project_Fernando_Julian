@@ -43,7 +43,7 @@ export const DetailReport = () => {
                     <tr>
                       <td>{report.uploadByUser.name}</td>
                       <td>{report.name}</td>
-                      <td>{report.size}</td>
+                      <td>{report.dataUploads.length}</td>
                       <td>{new Date(report.createdAt).toLocaleString()}</td>
                       <td>{report.statusReport.name}</td>
                     </tr>

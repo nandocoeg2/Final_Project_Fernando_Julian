@@ -80,10 +80,10 @@ export const userApi = createApi({
       }),
     }),
     patchReportData: builder.mutation({
-      query: ({ id, statusReportId }) => ({
+      query: ({ id, data }) => ({
         url: `/detail/${id}`,
         method: "PATCH",
-        body: statusReportId,
+        body: data,
         credentials: "include",
       }),
     }),

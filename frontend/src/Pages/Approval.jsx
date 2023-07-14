@@ -108,7 +108,7 @@ export const Approval = () => {
                     <tr>
                       <th>ID</th>
                       <th>Name</th>
-                      <th>Size</th>
+                      <th>Length</th>
                       <th>Uploaded by</th>
                       <th>Uploaded time</th>
                       <th>Status</th>
@@ -117,32 +117,42 @@ export const Approval = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems
-                      .filter((report) => report.statusReport.id === 1)
-                      .map((report, index) => (
-                        <tr key={report.id}>
-                          <td>{index + 1}</td>
-                          <td>{report.name}</td>
-                          <td>{report.size}</td>
-                          <td>{report.uploadByUser.name}</td>
-                          <td>{new Date(report.createdAt).toLocaleString()}</td>
-                          <td>
-                            <span className="badge badge-warning">
-                              {report.statusReport.name}
-                            </span>
-                          </td>
-                          <td>
-                            <a
-                              href={`/approval/detail/${report.id}`}
-                              rel="noreferrer"
-                            >
-                              <button className="btn btn-sm btn-outline">
-                                Detail
-                              </button>
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                    {currentItems.length === 0 ? (
+                      <tr>
+                        <center>
+                          <td>No data available.</td>
+                        </center>
+                      </tr>
+                    ) : (
+                      currentItems
+                        .filter((report) => report.statusReport.id === 1)
+                        .map((report, index) => (
+                          <tr key={report.id}>
+                            <td>{index + 1}</td>
+                            <td>{report.name}</td>
+                            <td>{report.length}</td>
+                            <td>{report.uploadByUser.name}</td>
+                            <td>
+                              {new Date(report.createdAt).toLocaleString()}
+                            </td>
+                            <td>
+                              <span className="badge badge-warning">
+                                {report.statusReport.name}
+                              </span>
+                            </td>
+                            <td>
+                              <a
+                                href={`/approval/detail/${report.id}`}
+                                rel="noreferrer"
+                              >
+                                <button className="btn btn-sm btn-outline">
+                                  Detail
+                                </button>
+                              </a>
+                            </td>
+                          </tr>
+                        ))
+                    )}
                   </tbody>
                 </table>
                 <center>

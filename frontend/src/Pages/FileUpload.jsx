@@ -71,13 +71,14 @@ export const FileUpload = () => {
           setCSVData(results.data);
           const reportData = {
             name: selectedFile.name,
-            size: selectedFile.size,
+            length: results.data.length - 1,
             userId: userId,
             data: results.data.slice(1),
           };
           console.log(reportData);
           const addReport = async () => {
             try {
+              console.log(reportData);
               await addReportData(reportData);
               setIsSuccess(true);
               setTimeout(() => {

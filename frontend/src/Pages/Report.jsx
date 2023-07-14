@@ -95,7 +95,7 @@ export const Report = () => {
                     <tr>
                       <th>ID</th>
                       <th>Name</th>
-                      <th>Size</th>
+                      <th>Length</th>
                       <th>Uploaded By</th>
                       <th>Status</th>
                       <th>Detail</th>
@@ -107,7 +107,7 @@ export const Report = () => {
                       <tr key={report.id}>
                         <td>{index + 1}</td>
                         <td>{report.name}</td>
-                        <td>{report.size}</td>
+                        <td>{report.length}</td>
                         <td>{report.uploadByUser.name}</td>
                         <td>
                           {report.statusReport.id === 3 ? (
