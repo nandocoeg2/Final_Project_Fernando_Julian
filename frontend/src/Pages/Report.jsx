@@ -13,6 +13,8 @@ export const Report = () => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState(0);
   const [role, setRole] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5); // Set the number of items per page
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -32,14 +34,45 @@ export const Report = () => {
   };
 
   const getReportDataQuery =
-    role === "admin" || "operator"
-      ? useGetReportDataQuery
-      : useGetReportDataByUserIdQuery;
+    role === "operator" ? useGetReportDataQuery : useGetReportDataByUserIdQuery;
   const { data: reportData, isError } = getReportDataQuery(userId);
 
   if (isError) {
     navigate("/dashboard");
   }
+
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = reportData
+    ? reportData.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+  const totalPages = reportData
+    ? Math.ceil(reportData.length / itemsPerPage)
+    : 0;
+
+  const renderPaginationButtons = () => {
+    if (totalPages <= 1) return null;
+    const buttons = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      buttons.push(
+        <button
+          key={i}
+          className={`join-item btn ${currentPage === i ? "btn-active" : ""}`}
+          onClick={() => paginate(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return buttons;
+  };
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -56,32 +89,41 @@ export const Report = () => {
           <div className="container p-4 mt-md-4 mt-2 border">
             <h2 className="text-2xl font-semibold mb-6">Report</h2>
             {reportData ? (
-              <table className="table w-full">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Uploaded By</th>
-                    <th>Status</th>
-                    <th>Detail</th>
-                    {/* Add more table headers as needed */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {reportData
-                    .filter(
-                      (report) =>
-                        report.statusReport.id === 2 ||
-                        report.statusReport.id === 3
-                    )
-                    .map((report, index) => (
+              <>
+                <table className="table w-full">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Size</th>
+                      <th>Uploaded By</th>
+                      <th>Status</th>
+                      <th>Detail</th>
+                      {/* Add more table headers as needed */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentItems.map((report, index) => (
                       <tr key={report.id}>
                         <td>{index + 1}</td>
                         <td>{report.name}</td>
                         <td>{report.size}</td>
                         <td>{report.uploadByUser.name}</td>
-                        <td>{report.statusReport.name}</td>
+                        <td>
+                          {report.statusReport.id === 3 ? (
+                            <span className="badge badge-error">
+                              {report.statusReport.name}
+                            </span>
+                          ) : report.statusReport.id === 2 ? (
+                            <span className="badge badge-success">
+                              {report.statusReport.name}
+                            </span>
+                          ) : (
+                            <span className="badge badge-warning">
+                              {report.statusReport.name}
+                            </span>
+                          )}
+                        </td>
                         <td>
                           <a
                             href={`/report/detail/${report.id}`}
@@ -94,11 +136,15 @@ export const Report = () => {
                         </td>
                       </tr>
                     ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+                <center>
+                  <div className="join">{renderPaginationButtons()}</div>
+                </center>
+              </>
             ) : (
               <center>
-                <span className="loading loading-infinity loading-lg"></span>;
+                <span className="loading loading-infinity loading-lg"></span>
               </center>
             )}
           </div>
