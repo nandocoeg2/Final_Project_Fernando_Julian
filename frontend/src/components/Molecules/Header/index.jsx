@@ -10,6 +10,10 @@ const Header = () => {
 
   const navigate = useNavigate();
   const Logout = async () => {
+    window.my_modal_2.showModal();
+  };
+
+  const handleLogoutConfirmation = async () => {
     const response = await axios.delete("http://localhost:2000/logout");
     console.log(response.data);
     navigate("/login");
@@ -44,12 +48,28 @@ const Header = () => {
           </div>
           <div className="flex gap-4 items-center">
             <h3>Hi, {name}</h3>
-            <button onClick={Logout} className="btn">
+            <button onClick={Logout} className="btn btn-outline">
               Logout
             </button>
           </div>
         </div>
       </header>
+
+      {/* Confirmation Modal */}
+      <dialog id="my_modal_2" className="modal">
+        <form method="dialog" className="modal-box">
+          <p className="py-4">Are you sure you want to logout?</p>
+          <div className="modal-action">
+            <button
+              className="btn btn-error"
+              onClick={handleLogoutConfirmation}
+            >
+              Sure
+            </button>
+            <button className="btn">Cancel</button>
+          </div>
+        </form>
+      </dialog>
     </>
   );
 };
