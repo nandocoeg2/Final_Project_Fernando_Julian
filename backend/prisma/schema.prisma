@@ -46,10 +46,9 @@ model ReportUpload {
   id               String          @id @default(uuid())
   name             String
   length           Int
-  userId           Int
+  userId           Int  
   uploadByUser     User            @relation(fields: [userId], references: [id])
-  processByUserId  Int?
-  processedTime    DateTime?       @updatedAt
+  processedByUser  String?
   statusReportId   Int?            @default(1)
   statusReport     statusReport?   @relation(fields: [statusReportId], references: [id])
   dataUploads      DataUpload[]
