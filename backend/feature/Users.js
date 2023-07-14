@@ -1,6 +1,7 @@
 import prisma from "../db/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 export const getUsers = async (req, res) => {
   const users = await prisma.user.findMany({
@@ -363,7 +364,7 @@ export const getReportDataById = async (req, res) => {
     const dataId = req.params.dataId;
     const report = await prisma.reportUpload.findUnique({
       where: {
-        id: parseInt(dataId),
+        id: dataId,
       },
       select: {
         id: true,
@@ -397,7 +398,7 @@ export const actionReportData = async (req, res) => {
     const { statusReportId } = req.body;
     const report = await prisma.reportUpload.update({
       where: {
-        id: parseInt(dataId),
+        id: dataId,
       },
       data: {
         statusReportId: parseInt(statusReportId),
