@@ -158,6 +158,9 @@ export const getUserMenu = async (req, res) => {
         },
       },
     });
+    if (!menu) {
+      return res.status(404).json({ error: "Menu not found" });
+    }
     res.json(menu);
   } catch (error) {
     console.log(error);
@@ -385,6 +388,9 @@ export const getReportDataById = async (req, res) => {
         createdAt: true,
       },
     });
+    if (!report) {
+      return res.status(404).json({ error: "Report not found" });
+    }
     res.status(200).json(report);
   } catch (error) {
     console.log(error);
