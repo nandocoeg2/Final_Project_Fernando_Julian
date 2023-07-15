@@ -80,6 +80,17 @@ export const Dashboard = () => {
             <button onClick={getUsers} className="btn">
               Get
             </button>
+            <div className="flex gap-4 justify-between">
+              <div className="card w-96 bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">Approval</h2>
+                  <p>You have 3 report need action!</p>
+                  <div className="card-actions justify-end">
+                    <button className="btn btn-primary">View Details</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

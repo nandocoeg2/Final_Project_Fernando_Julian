@@ -88,9 +88,9 @@ export const userApi = createApi({
       }),
     }),
     updateMenu: builder.mutation({
-      query: ({ id, menuData }) => ({
-        url: `/menu/${id}`,
-        method: "PATCH",
+      query: ({ menuData }) => ({
+        url: `/menu`,
+        method: "POST",
         body: menuData,
         credentials: "include",
       }),

@@ -1,9 +1,12 @@
 import React from "react";
 import Navigation from "../components/Molecules/Navigation";
 import Header from "../components/Molecules/Header";
-import { useGetRoleMenuQuery } from "../features/users";
-import { useGetAllMenuQuery } from "../features/users";
-import useFormik from "formik";
+import {
+  useGetRoleMenuQuery,
+  useGetAllMenuQuery,
+  useUpdateMenuMutation,
+} from "../features/users";
+import { useFormik } from "formik";
 
 export const Profiles = () => {
   const {
@@ -18,6 +21,21 @@ export const Profiles = () => {
     isError: allMenuError,
   } = useGetAllMenuQuery();
 
+  const [updateMenu] = useUpdateMenuMutation();
+
+  const formik = useFormik({
+    initialValues: {
+      roleId: "",
+      menuIds: [],
+    },
+    onSubmit: (values) => {
+      console.log(values);
+      updateMenu({ menuData: values });
+      document.getElementById("edit_role_menu").close();
+      window.location.reload();
+    },
+  });
+
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
@@ -31,7 +49,22 @@ export const Profiles = () => {
         {/* Konten Dashboard */}
         <div className="flex-1 bg-white p-8">
           <div className="container p-4 mt-md-4 mt-2 border">
-            <h2 className="text-2xl font-semibold mb-6">Profiles</h2>
+            <div className="flex justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold mb-6">Profiles</h2>
+              </div>
+              <div>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    document.getElementById("edit_role_menu").showModal();
+                  }}
+                >
+                  Edit Menu
+                </button>
+              </div>
+            </div>
+
             <div className="p-8 my-2">
               <table className="table">
                 <thead>
@@ -39,7 +72,6 @@ export const Profiles = () => {
                     <th>No</th>
                     <th>Role</th>
                     <th>Menu Allowed</th>
-                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -66,14 +98,6 @@ export const Profiles = () => {
                             </div>
                           ))}
                         </td>
-                        <td>
-                          <button
-                            className="btn btn-sm btn-outline"
-                            onClick={() => window.edit_role_menu.showModal()}
-                          >
-                            Edit
-                          </button>
-                        </td>
                       </tr>
                     ))
                   ) : (
@@ -83,37 +107,75 @@ export const Profiles = () => {
                   )}
                 </tbody>
 
-                <dialog id="edit_role_menu" className="modal">
-                  <form method="dialog" className="modal-box">
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                      ✕
-                    </button>
-                    <h3 className="font-bold text-lg">Edit!</h3>
-                    <label className="label">
-                      <span className="label-text">Role selected</span>
-                    </label>
+                <dialog id="edit_role_menu" className="modal ">
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    className="modal-box w-11/12"
+                  >
+                    <p className="text-lg font-semibold">Edit Role Menu</p>
                     <div className="form-control">
                       <label className="label">
-                        <span className="label-text">Menu Allowed</span>
+                        <span className="label-text font-semibold text-base">
+                          Role
+                        </span>
                       </label>
-                      <div className="form-control">
-                        <label className="label cursor-pointer">
-                          <span className="label-text">Menu 1</span>
-                          <input type="checkbox" className="checkbox" />
-                        </label>
-                        <label className="label cursor-pointer">
-                          <span className="label-text">Menu 2</span>
-                          <input type="checkbox" className="checkbox" />
-                        </label>
-                      </div>
+                      <select
+                        name="roleId"
+                        onChange={formik.handleChange}
+                        value={formik.values.role}
+                        className="select select-bordered select-primary w-full max-w-xs"
+                      >
+                        <option value="">Select Role</option>
+                        <option value="1">Admin</option>
+                        <option value="2">Operator</option>
+                        <option value="3">Maker</option>
+                      </select>
+                    </div>
+                    <label className="label">
+                      <span className="label-text font-semibold text-base">
+                        Menu Allowed
+                      </span>
+                    </label>
+                    <div className="form-control">
+                      {allMenuLoading ? (
+                        <span className="loading loading-lg"></span>
+                      ) : allMenuError ? (
+                        <span>Error loading menu data.</span>
+                      ) : (
+                        allMenuData &&
+                        allMenuData.map((menu, index) => (
+                          <label
+                            className="label cursor-pointer"
+                            key={index}
+                            htmlFor={menu.id}
+                          >
+                            <span className="label-text">{menu.name}</span>
+                            <input
+                              type="checkbox"
+                              className="checkbox"
+                              name="menuIds"
+                              value={menu.id}
+                              onChange={formik.handleChange}
+                              id={menu.id}
+                            />
+                          </label>
+                        ))
+                      )}
                     </div>
 
-                    <div className="form-control mt-6">
-                      <input
-                        type="submit"
-                        className="btn btn-primary"
-                        value="Submit"
-                      />
+                    <div className="modal-action">
+                      <button
+                        type="button"
+                        className="btn btn-outline w-20"
+                        onClick={() => {
+                          document.getElementById("edit_role_menu").close();
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button type="submit" className="btn btn-success w-20">
+                        Save
+                      </button>
                     </div>
                   </form>
                 </dialog>
