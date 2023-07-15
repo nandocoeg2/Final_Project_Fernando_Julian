@@ -10,7 +10,7 @@ export const DetailReport = () => {
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
 
   if (isError) {
-    navigate("/dashboard");
+    navigate("/dashboard", { replace: true });
   }
   return (
     <div className="flex flex-col h-screen">

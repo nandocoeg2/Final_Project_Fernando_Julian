@@ -20,6 +20,7 @@ import {
   DetailApproval,
   DetailReport,
 } from "./Pages/index";
+import NotFoundPage from "./Pages/Notfound";
 const App = () => {
   return (
     <Provider store={store}>
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/upload" element={<FileUpload />} />
           <Route path="/report" element={<Report />} />
           <Route path="/approval" element={<Approval />} />
+          <Route path="*" element={<NotFoundPage />} />
           <Route path="/report/detail/:dataId" element={<DetailReport />} />
           <Route path="/approval/detail/:dataId" element={<DetailApproval />} />
           <Route path="/approval/detail/:dataId" element={<DetailApproval />} />

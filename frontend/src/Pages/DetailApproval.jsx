@@ -62,8 +62,8 @@ export const DetailApproval = () => {
   const { data: report, isError } = useGetReportDataByDataIdQuery(dataId);
   const [patchReportData, { isLoading: isPatchLoading }] =
     usePatchReportDataMutation();
-  if (report) {
-    console.log(report);
+  if (isError) {
+    navigate("/404", { replace: true });
   }
   const formik = useFormik({
     initialValues: {
