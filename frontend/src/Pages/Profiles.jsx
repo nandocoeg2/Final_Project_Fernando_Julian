@@ -29,7 +29,6 @@ export const Profiles = () => {
       menuIds: [],
     },
     onSubmit: (values) => {
-      console.log(values);
       updateMenu({ menuData: values });
       document.getElementById("edit_role_menu").close();
       window.location.reload();
@@ -124,11 +123,14 @@ export const Profiles = () => {
                         onChange={formik.handleChange}
                         value={formik.values.role}
                         className="select select-bordered select-primary w-full max-w-xs"
+                        defaultValue={0}
                       >
-                        <option value="">Select Role</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Operator</option>
-                        <option value="3">Maker</option>
+                        <option value={0} disabled>
+                          Select Role
+                        </option>
+                        <option value={1}>Admin</option>
+                        <option value={2}>Operator</option>
+                        <option value={3}>Maker</option>
                       </select>
                     </div>
                     <label className="label">
