@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Navigation from "../components/Molecules/Navigation";
-import Header from "../components/Molecules/Header";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
+import { Header, Footer, Navigation } from "../components/Molecules";
 import {
   useGetReportDataQuery,
   useRefreshTokenMutation,
@@ -77,13 +76,14 @@ export const Dashboard = () => {
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <Header />
+      <div className="sticky top-0 z-50">
+        <Header />
+      </div>
 
       {/* Konten Dashboard */}
       <div className="flex flex-1">
         {/* Navigasi */}
         <Navigation />
-
         {/* Konten Dashboard */}
         <div className="flex-1 bg-white p-8">
           <div className="container">
@@ -91,7 +91,7 @@ export const Dashboard = () => {
               <div className="card w-full bg-base-100 shadow-xl">
                 <div className="card-body">
                   <h2 className="text-2xl font-semibold mb-6">
-                    Welcome to Dashboard! {name} {expire} {role}
+                    Welcome to Dashboard, {name}!
                   </h2>
                   {role === "operator" ? (
                     <div>
@@ -127,6 +127,8 @@ export const Dashboard = () => {
                 </div>
               </div>
             </div>
+            {/* Footer */}
+            <Footer />
           </div>
         </div>
       </div>

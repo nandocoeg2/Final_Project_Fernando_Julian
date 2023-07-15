@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../components/Molecules/Header";
-import Navigation from "../components/Molecules/Navigation";
+import { Header, Footer, Navigation } from "../components/Molecules";
+
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetReportDataByDataIdQuery } from "../features/users";
 
@@ -96,6 +96,8 @@ export const DetailReport = () => {
               </div>
             </div>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </div>

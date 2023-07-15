@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Navigation from "../components/Molecules/Navigation";
-import Header from "../components/Molecules/Header";
+import { Header, Footer, Navigation } from "../components/Molecules";
+
 import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 import {
@@ -150,7 +150,6 @@ export const FileUpload = () => {
         <div className="flex-1 bg-white p-8">
           <div className="card w-full bg-base-100 shadow-xl">
             <div className="card-body">
-              {" "}
               <h2 className="text-lg font-semibold">Upload File</h2>
               <form onSubmit={handleSubmit}>
                 <div className="text-center">
@@ -227,6 +226,8 @@ export const FileUpload = () => {
               </div>
             </div>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </div>

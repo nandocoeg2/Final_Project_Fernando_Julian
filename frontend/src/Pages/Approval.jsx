@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Molecules/Header";
-import Navigation from "../components/Molecules/Navigation";
+import { Header, Footer, Navigation } from "../components/Molecules";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -164,6 +163,9 @@ export const Approval = () => {
               )}
             </div>
           </div>
+
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </div>

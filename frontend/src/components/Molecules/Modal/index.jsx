@@ -1,6 +1,19 @@
 import React from "react";
+import { useFormik } from "formik";
 
-const Modal = () => {
+export const Modal = () => {
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      role: 0,
+      email: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
+
   return (
     <>
       <dialog id="action_edit_modal" className="modal">
@@ -86,5 +99,3 @@ const Modal = () => {
     </>
   );
 };
-
-export default Modal;

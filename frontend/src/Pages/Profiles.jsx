@@ -1,6 +1,6 @@
 import React from "react";
-import Navigation from "../components/Molecules/Navigation";
-import Header from "../components/Molecules/Header";
+import { Header, Footer, Navigation } from "../components/Molecules";
+
 import {
   useGetRoleMenuQuery,
   useGetAllMenuQuery,
@@ -49,14 +49,13 @@ export const Profiles = () => {
         <div className="flex-1 bg-white p-8">
           <div className="card w-full bg-base-100 shadow-xl">
             <div className="card-body">
-              {" "}
               <div className="flex justify-between">
                 <div>
                   <h2 className="text-2xl font-semibold">Profiles</h2>
                 </div>
                 <div>
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-active"
                     onClick={() => {
                       document.getElementById("edit_role_menu").showModal();
                     }}
@@ -87,7 +86,9 @@ export const Profiles = () => {
                       roleMenuData.map((roleMenu, index) => (
                         <tr key={index}>
                           <td>{index + 1}</td>
-                          <td>{roleMenu.name}</td>
+                          <td style={{ textTransform: "capitalize" }}>
+                            {roleMenu.name}
+                          </td>
                           <td>
                             {roleMenu.menus.map((menu, index) => (
                               <div
@@ -186,6 +187,8 @@ export const Profiles = () => {
               </div>
             </div>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </div>

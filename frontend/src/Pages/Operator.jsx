@@ -9,8 +9,8 @@ import {
   useUpdateUserMutation,
 } from "../features/users";
 import { axiosInstance } from "../app/axios";
-import Navigation from "../components/Molecules/Navigation";
-import Header from "../components/Molecules/Header";
+import { Header, Footer, Navigation } from "../components/Molecules";
+
 import { useFormik } from "formik";
 
 export const Operator = () => {
@@ -295,6 +295,8 @@ export const Operator = () => {
               </div>
             </div>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
 
         {/* Confirmation Modal */}

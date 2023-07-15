@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRefreshTokenMutation } from "../../../features/users";
 import jwt_decode from "jwt-decode";
 
-const Header = () => {
+export const Header = () => {
   const [name, setName] = useState("");
   const [token, setToken] = useState("");
 
@@ -73,5 +73,3 @@ const Header = () => {
     </>
   );
 };
-
-export default Header;
