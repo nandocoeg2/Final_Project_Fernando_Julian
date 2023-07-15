@@ -3,7 +3,10 @@ import Navigation from "../components/Molecules/Navigation";
 import Header from "../components/Molecules/Header";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { useRefreshTokenMutation } from "../features/users";
+import {
+  useGetReportDataQuery,
+  useRefreshTokenMutation,
+} from "../features/users";
 import axios from "axios";
 import { axiosInstance } from "../app/axios";
 
@@ -12,6 +15,7 @@ export const Dashboard = () => {
   const [token, setToken] = useState("");
   const [expire, setExpire] = useState("");
   const [role, setRole] = useState("");
+  const [reportDataLength, setReportDataLength] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,7 +23,6 @@ export const Dashboard = () => {
   }, []);
 
   const [refreshToken] = useRefreshTokenMutation();
-
   const responseToken = async () => {
     try {
       const response = await refreshToken();
@@ -52,6 +55,16 @@ export const Dashboard = () => {
     }
   );
 
+  const { data: reportData } = useGetReportDataQuery();
+
+  useEffect(() => {
+    if (reportData) {
+      setReportDataLength(
+        reportData.filter((report) => report.statusReport.id === 1).length
+      );
+    }
+  }, [reportData]);
+
   const getUsers = async () => {
     const response = await axiosInstance.get("http://localhost:2000/users", {
       headers: {
@@ -74,20 +87,43 @@ export const Dashboard = () => {
         {/* Konten Dashboard */}
         <div className="flex-1 bg-white p-8">
           <div className="container">
-            <h2 className="text-2xl font-semibold mb-6">
-              Welcome to Dashboard! {name} {expire} {role}
-            </h2>
-            <button onClick={getUsers} className="btn">
-              Get
-            </button>
             <div className="flex gap-4 justify-between">
-              <div className="card w-96 bg-base-100 shadow-xl">
+              <div className="card w-full bg-base-100 shadow-xl">
                 <div className="card-body">
-                  <h2 className="card-title">Approval</h2>
-                  <p>You have 3 report need action!</p>
-                  <div className="card-actions justify-end">
-                    <button className="btn btn-primary">View Details</button>
-                  </div>
+                  <h2 className="text-2xl font-semibold mb-6">
+                    Welcome to Dashboard! {name} {expire} {role}
+                  </h2>
+                  {role === "operator" ? (
+                    <div>
+                      <p>You have {reportDataLength} report need action!</p>
+                      <div className="card-actions justify-end">
+                        <a
+                          className="btn btn-primary"
+                          href="
+                        /approval"
+                        >
+                          View Details
+                        </a>
+                      </div>
+                    </div>
+                  ) : role === "maker" ? (
+                    <div>
+                      <p>Check your report!</p>
+                      <div className="card-actions justify-end">
+                        <a
+                          className="btn btn-outline"
+                          href="
+                        /approval"
+                        >
+                          View Details
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p>You have no report need action.</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

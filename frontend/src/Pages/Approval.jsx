@@ -40,11 +40,7 @@ export const Approval = () => {
     }
   };
 
-  const getReportDataQuery =
-    role === "admin" || "operator"
-      ? useGetReportDataQuery
-      : useGetReportDataByUserIdQuery;
-  const { data: reportData, isError } = getReportDataQuery(userId);
+  const { data: reportData, isError } = useGetReportDataQuery(userId);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
