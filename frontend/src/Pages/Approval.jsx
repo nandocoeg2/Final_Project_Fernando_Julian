@@ -95,71 +95,74 @@ export const Approval = () => {
 
         {/* Dashboard content */}
         <div className="flex-1 bg-white p-8">
-          <div className="container p-4 mt-md-4 mt-2 border">
-            <h2 className="text-2xl font-semibold mb-6">Approval</h2>
-            {reportData ? (
-              <>
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Length</th>
-                      <th>Uploaded by</th>
-                      <th>Uploaded time</th>
-                      <th>Status</th>
-                      <th>Detail</th>
-                      {/* Add more table headers as needed */}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentItems.length === 0 ? (
+          <div className="card w-full bg-base-100 shadow-xl">
+            <div className="card-body">
+              {" "}
+              <h2 className="text-2xl font-semibold mb-6">Approval</h2>
+              {reportData ? (
+                <>
+                  <table className="table w-full">
+                    <thead>
                       <tr>
-                        <center>
-                          <td>No data available.</td>
-                        </center>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Length</th>
+                        <th>Uploaded by</th>
+                        <th>Uploaded time</th>
+                        <th>Status</th>
+                        <th>Detail</th>
+                        {/* Add more table headers as needed */}
                       </tr>
-                    ) : (
-                      currentItems
-                        .filter((report) => report.statusReport.id === 1)
-                        .map((report, index) => (
-                          <tr key={report.id}>
-                            <td>{index + 1}</td>
-                            <td>{report.name}</td>
-                            <td>{report.length}</td>
-                            <td>{report.uploadByUser.name}</td>
-                            <td>
-                              {new Date(report.createdAt).toLocaleString()}
-                            </td>
-                            <td>
-                              <span className="badge badge-warning">
-                                {report.statusReport.name}
-                              </span>
-                            </td>
-                            <td>
-                              <a
-                                href={`/approval/detail/${report.id}`}
-                                rel="noreferrer"
-                              >
-                                <button className="btn btn-sm btn-outline">
-                                  Detail
-                                </button>
-                              </a>
-                            </td>
-                          </tr>
-                        ))
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {currentItems.length === 0 ? (
+                        <tr>
+                          <center>
+                            <td>No data available.</td>
+                          </center>
+                        </tr>
+                      ) : (
+                        currentItems
+                          .filter((report) => report.statusReport.id === 1)
+                          .map((report, index) => (
+                            <tr key={report.id}>
+                              <td>{index + 1}</td>
+                              <td>{report.name}</td>
+                              <td>{report.length}</td>
+                              <td>{report.uploadByUser.name}</td>
+                              <td>
+                                {new Date(report.createdAt).toLocaleString()}
+                              </td>
+                              <td>
+                                <span className="badge badge-warning">
+                                  {report.statusReport.name}
+                                </span>
+                              </td>
+                              <td>
+                                <a
+                                  href={`/approval/detail/${report.id}`}
+                                  rel="noreferrer"
+                                >
+                                  <button className="btn btn-sm btn-outline">
+                                    Detail
+                                  </button>
+                                </a>
+                              </td>
+                            </tr>
+                          ))
+                      )}
+                    </tbody>
+                  </table>
+                  <center>
+                    <div className="join">{renderPaginationButtons()}</div>
+                  </center>
+                </>
+              ) : (
                 <center>
-                  <div className="join">{renderPaginationButtons()}</div>
+                  <span className="loading loading-infinity loading-lg"></span>;
                 </center>
-              </>
-            ) : (
-              <center>
-                <span className="loading loading-infinity loading-lg"></span>;
-              </center>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>

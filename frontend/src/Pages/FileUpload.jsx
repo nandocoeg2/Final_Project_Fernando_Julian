@@ -148,72 +148,82 @@ export const FileUpload = () => {
 
         {/* Konten Dashboard */}
         <div className="flex-1 bg-white p-8">
-          <div className="container p-4 mt-md-4 mt-2 border">
-            <h2 className="text-lg font-semibold">Upload File</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="text-center">
-                {selectedFile && (
-                  <span className="text-gray-500">{selectedFile.name}</span>
-                )}
-                {fileError && <span className="text-red-500">{fileError}</span>}
-              </div>
-              <div className="flex gap-4 m-2 justify-center">
-                <div>
-                  <label htmlFor="fileInput" className="btn btn-outline btn-sm">
-                    Select File
-                  </label>
-                  <input
-                    id="fileInput"
-                    type="file"
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
+          <div className="card w-full bg-base-100 shadow-xl">
+            <div className="card-body">
+              {" "}
+              <h2 className="text-lg font-semibold">Upload File</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="text-center">
+                  {selectedFile && (
+                    <span className="text-gray-500">{selectedFile.name}</span>
+                  )}
+                  {fileError && (
+                    <span className="text-red-500">{fileError}</span>
+                  )}
                 </div>
-                <button
-                  type="submit"
-                  className="btn btn-outline btn-sm"
-                  disabled={isUploadDisabled}
-                >
-                  Upload
-                </button>
-              </div>
-            </form>
-            {/* Table Hasil Upload CSV */}
-            <div className="mt-4">
-              <h2 className="text-lg font-semibold">Hasil Upload</h2>
-              {isSuccess && (
-                <div className="toast toast-top toast-center">
-                  <div className="alert alert-success">
-                    <span>Your file has been uploaded!</span>
+                <div className="flex gap-4 m-2 justify-center">
+                  <div>
+                    <label
+                      htmlFor="fileInput"
+                      className="btn btn-outline btn-sm"
+                    >
+                      Select File
+                    </label>
+                    <input
+                      id="fileInput"
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
                   </div>
+                  <button
+                    type="submit"
+                    className="btn btn-outline btn-sm"
+                    disabled={isUploadDisabled}
+                  >
+                    Upload
+                  </button>
                 </div>
-              )}
-              <div className="overflow-x-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th className="border px-4 py-2">Sender Name</th>
-                      <th className="border px-4 py-2">Sender City</th>
-                      <th className="border px-4 py-2">Sender Country</th>
-                      <th className="border px-4 py-2">Beneficiary Name</th>
-                      <th className="border px-4 py-2">Beneficiary City</th>
-                      <th className="border px-4 py-2">Beneficiary Country</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {CSVData &&
-                      CSVData.slice(1).map((data, index) => (
-                        <tr key={index}>
-                          <td className="border px-4 py-2">{data[0]}</td>
-                          <td className="border px-4 py-2">{data[1]}</td>
-                          <td className="border px-4 py-2">{data[2]}</td>
-                          <td className="border px-4 py-2">{data[3]}</td>
-                          <td className="border px-4 py-2">{data[4]}</td>
-                          <td className="border px-4 py-2">{data[5]}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+              </form>
+              {/* Table Hasil Upload CSV */}
+              <div className="mt-4">
+                <h2 className="text-lg font-semibold">Hasil Upload</h2>
+                {isSuccess && (
+                  <div className="toast toast-top toast-center">
+                    <div className="alert alert-success">
+                      <span>Your file has been uploaded!</span>
+                    </div>
+                  </div>
+                )}
+                <div className="overflow-x-auto">
+                  <table className="table w-full">
+                    <thead>
+                      <tr>
+                        <th className="border px-4 py-2">Sender Name</th>
+                        <th className="border px-4 py-2">Sender City</th>
+                        <th className="border px-4 py-2">Sender Country</th>
+                        <th className="border px-4 py-2">Beneficiary Name</th>
+                        <th className="border px-4 py-2">Beneficiary City</th>
+                        <th className="border px-4 py-2">
+                          Beneficiary Country
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {CSVData &&
+                        CSVData.slice(1).map((data, index) => (
+                          <tr key={index}>
+                            <td className="border px-4 py-2">{data[0]}</td>
+                            <td className="border px-4 py-2">{data[1]}</td>
+                            <td className="border px-4 py-2">{data[2]}</td>
+                            <td className="border px-4 py-2">{data[3]}</td>
+                            <td className="border px-4 py-2">{data[4]}</td>
+                            <td className="border px-4 py-2">{data[5]}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
