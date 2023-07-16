@@ -240,7 +240,7 @@ export const deleteUser = async (req, res) => {
     });
     res.send(`User deleted ${deletedUser.name} successfully`);
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).send(`Error: Cannot Delete User`);
   }
 };
 
@@ -248,6 +248,9 @@ export const updateUser = async (req, res) => {
   const id = req.params.id;
   console.log(id);
   const { name, email, password, role } = req.body;
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ error: "Please fill all the fields" });
+  }
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -292,7 +295,7 @@ export const reportData = async (req, res) => {
     });
     res.status(200).send(`Successfully`);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(`Cannot create report`);
   }
 };
 
@@ -355,9 +358,12 @@ export const getReportDataByUserId = async (req, res) => {
         createdAt: true,
       },
     });
+    if (report.length === 0) {
+      return res.status(404).json({ error: "Report not found" });
+    }
     res.status(200).json(report);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(`Error: Cannot get report data`);
   }
 };
 
@@ -412,6 +418,6 @@ export const actionReportData = async (req, res) => {
     });
     res.status(200).send(`Successfully update status report data ${dataId}`);
   } catch (error) {
-    console.log(error);
+    res.status(400).send(`Error: Cannot update status report data`);
   }
 };
